@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="dashboard.html" class="active">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="../analytics/analytics.html">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+            <li><a href="../data-entry/data-entry.html">
+                <span class="sidebar-menu-icon">📝</span>
+                <span>Data Entry</span>
+            </a></li>
+            <li><a href="#">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span>Settings</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Dashboard</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Overview Cards -->
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Total Bookings</div>
+                    <div class="overview-card-icon">📋</div>
+                </div>
+                <div class="overview-card-value">1,247</div>
+                <div class="overview-card-change">+12% from last month</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Active Destinations</div>
+                    <div class="overview-card-icon">🌍</div>
+                </div>
+                <div class="overview-card-value">48</div>
+                <div class="overview-card-change">+3 new this month</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Pending Tasks</div>
+                    <div class="overview-card-icon">⏳</div>
+                </div>
+                <div class="overview-card-value">23</div>
+                <div class="overview-card-change warning-text">Requires attention</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Revenue</div>
+                    <div class="overview-card-icon">💰</div>
+                </div>
+                <div class="overview-card-value">$124,580</div>
+                <div class="overview-card-change">+8% from last month</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                <div class="activity-log">
+                    <div class="activity-item">
+                        <div class="activity-icon booking">📋</div>
+                        <div class="activity-content">
+                            <div class="activity-title">New booking received for Paris Package</div>
+                            <div class="activity-time">2 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon destination">🌍</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Destination "Bali" was updated</div>
+                            <div class="activity-time">15 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon user">👤</div>
+                        <div class="activity-content">
+                            <div class="activity-title">New user registration: john.doe@example.com</div>
+                            <div class="activity-time">1 hour ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon booking">📋</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Booking #1247 was confirmed</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon destination">🌍</div>
+                        <div class="activity-content">
+                            <div class="activity-title">New destination "Tokyo" was added</div>
+                            <div class="activity-time">3 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon booking">📋</div>
+                        <div class="activity-content">
+                            <div class="activity-title">Payment received for booking #1245</div>
+                            <div class="activity-time">5 hours ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Quick Actions</h3>
+                </div>
+                <div class="quick-actions">
+                    <a href="#" class="quick-action-btn">
+                        <div class="quick-action-icon">🌍</div>
+                        <div class="quick-action-title">Add Destination</div>
+                    </a>
+                    <a href="#" class="quick-action-btn">
+                        <div class="quick-action-icon">📦</div>
+                        <div class="quick-action-title">Add Package</div>
+                    </a>
+                    <a href="#" class="quick-action-btn">
+                        <div class="quick-action-icon">👥</div>
+                        <div class="quick-action-title">Manage Users</div>
+                    </a>
+                    <a href="../analytics/analytics.html" class="quick-action-btn">
+                        <div class="quick-action-icon">📊</div>
+                        <div class="quick-action-title">View Analytics</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
+

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Entry - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="data-entry.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../dashboard/dashboard.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="../analytics/analytics.html">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+            <li><a href="data-entry.html" class="active">
+                <span class="sidebar-menu-icon">📝</span>
+                <span>Data Entry</span>
+            </a></li>
+            <li><a href="#">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span>Settings</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Data Entry</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="data-entry-container">
+            <!-- Data Type Sidebar -->
+            <div class="data-sidebar">
+                <div class="data-sidebar-card">
+                    <h4 class="data-sidebar-title">Select Data Type</h4>
+                    <ul class="data-type-list">
+                        <li class="data-type-item">
+                            <a href="#" class="data-type-link active" data-type="destination">
+                                <span class="data-type-icon">🌍</span>
+                                <span>Destination</span>
+                            </a>
+                        </li>
+                        <li class="data-type-item">
+                            <a href="#" class="data-type-link" data-type="package">
+                                <span class="data-type-icon">📦</span>
+                                <span>Package</span>
+                            </a>
+                        </li>
+                        <li class="data-type-item">
+                            <a href="#" class="data-type-link" data-type="hotel">
+                                <span class="data-type-icon">🏨</span>
+                                <span>Hotel</span>
+                            </a>
+                        </li>
+                        <li class="data-type-item">
+                            <a href="#" class="data-type-link" data-type="booking">
+                                <span class="data-type-icon">📋</span>
+                                <span>Booking</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Form Content -->
+            <div class="form-content">
+                <!-- Destination Form -->
+                <div class="form-content-type active" id="destination-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Destination Information</h3>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Destination Name *</label>
+                                <input type="text" class="form-control" placeholder="Enter destination name" required>
+                                <div class="validation-message error">This field is required</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Country *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Country</option>
+                                    <option>France</option>
+                                    <option>Japan</option>
+                                    <option>Indonesia</option>
+                                    <option>United States</option>
+                                    <option>United Kingdom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">City *</label>
+                                <input type="text" class="form-control" placeholder="Enter city name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Category</option>
+                                    <option>Adventure</option>
+                                    <option>Relaxation</option>
+                                    <option>Cultural</option>
+                                    <option>Business</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description *</label>
+                            <textarea class="form-control" rows="5" placeholder="Enter detailed description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Upload Images</label>
+                            <div class="file-upload-wrapper">
+                                <div class="file-upload-btn">
+                                    <span>📷</span>
+                                    <span>Choose Files</span>
+                                </div>
+                                <input type="file" class="file-upload-input" multiple accept="image/*">
+                            </div>
+                            <div class="file-upload-hint">
+                                You can upload multiple images (PNG, JPG, GIF up to 10MB each)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Package Form -->
+                <div class="form-content-type" id="package-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Package Information</h3>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Package Name *</label>
+                                <input type="text" class="form-control" placeholder="Enter package name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Destination *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Destination</option>
+                                    <option>Paris, France</option>
+                                    <option>Tokyo, Japan</option>
+                                    <option>Bali, Indonesia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label class="form-label">Duration (Days) *</label>
+                                <input type="number" class="form-control" placeholder="e.g., 7" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Price *</label>
+                                <input type="number" class="form-control" placeholder="0.00" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Currency *</label>
+                                <select class="form-control" required>
+                                    <option>USD ($)</option>
+                                    <option>EUR (€)</option>
+                                    <option>GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Package Description *</label>
+                            <textarea class="form-control" rows="6" placeholder="Enter package details and inclusions" required></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel Form -->
+                <div class="form-content-type" id="hotel-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Hotel Information</h3>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Hotel Name *</label>
+                                <input type="text" class="form-control" placeholder="Enter hotel name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Location *</label>
+                                <input type="text" class="form-control" placeholder="Enter hotel location" required>
+                            </div>
+                        </div>
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label class="form-label">Star Rating *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Rating</option>
+                                    <option>1 Star</option>
+                                    <option>2 Stars</option>
+                                    <option>3 Stars</option>
+                                    <option>4 Stars</option>
+                                    <option>5 Stars</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Price per Night *</label>
+                                <input type="number" class="form-control" placeholder="0.00" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Total Rooms</label>
+                                <input type="number" class="form-control" placeholder="Enter number of rooms">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amenities</label>
+                            <div class="amenities-grid">
+                                <div class="form-check">
+                                    <input type="checkbox" id="wifi">
+                                    <label for="wifi" class="checkbox-label">Wi-Fi</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="pool">
+                                    <label for="pool" class="checkbox-label">Swimming Pool</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="spa">
+                                    <label for="spa" class="checkbox-label">Spa</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="gym">
+                                    <label for="gym" class="checkbox-label">Gym</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="restaurant">
+                                    <label for="restaurant" class="checkbox-label">Restaurant</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox" id="parking">
+                                    <label for="parking" class="checkbox-label">Parking</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <div class="form-content-type" id="booking-form">
+                    <div class="form-section">
+                        <h3 class="section-title">Booking Information</h3>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Customer Name *</label>
+                                <input type="text" class="form-control" placeholder="Enter customer name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" placeholder="customer@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label class="form-label">Package / Destination *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Package or Destination</option>
+                                    <option>Paris Package - 7 Days</option>
+                                    <option>Tokyo Adventure - 5 Days</option>
+                                    <option>Bali Relaxation - 10 Days</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Number of Guests *</label>
+                                <input type="number" class="form-control" placeholder="1" min="1" required>
+                            </div>
+                        </div>
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label class="form-label">Check-in Date *</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Check-out Date *</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status *</label>
+                                <select class="form-control" required>
+                                    <option value="">Select Status</option>
+                                    <option>Pending</option>
+                                    <option>Confirmed</option>
+                                    <option>Cancelled</option>
+                                    <option>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Special Requests</label>
+                            <textarea class="form-control" rows="4" placeholder="Any special requests or notes"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button class="btn btn-secondary">Cancel</button>
+                    <button class="btn btn-outline">Save & Add Another</button>
+                    <button class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="data-entry.js"></script>
+</body>
+</html>
+
+
