@@ -14,18 +14,45 @@ document.querySelectorAll('.data-type-link').forEach(link => {
         document.querySelectorAll('.form-content-type').forEach(form => {
             form.classList.remove('active');
         });
-        document.getElementById(dataType + '-form').classList.add('active');
+        const formId = dataType === 'air-travel' ? 'air-travel-form' : 
+                      dataType === 'accommodation' ? 'accommodation-form' :
+                      dataType + '-form';
+        document.getElementById(formId).classList.add('active');
     });
 });
 
-// Form validation example
-document.querySelectorAll('form, .form-control').forEach(input => {
+// Accommodation type change handler - show/hide hotel-specific fields
+const accTypeSelect = document.getElementById('acc-type');
+if (accTypeSelect) {
+    accTypeSelect.addEventListener('change', function() {
+        const starRatingGroup = document.getElementById('acc-star-rating-group');
+        const bedTypeGroup = document.getElementById('acc-bed-type-group');
+        
+        if (this.value === 'Hotel') {
+            starRatingGroup.style.display = 'block';
+            bedTypeGroup.style.display = 'block';
+        } else {
+            starRatingGroup.style.display = 'none';
+            bedTypeGroup.style.display = 'none';
+            document.getElementById('acc-star-rating').value = '';
+            document.getElementById('acc-bed-type').value = '';
+        }
+    });
+}
+
+// Form validation
+document.querySelectorAll('.form-control').forEach(input => {
     input.addEventListener('blur', function() {
         if (this.hasAttribute('required') && !this.value) {
-            const msg = this.parentElement.querySelector('.validation-message');
-            if (msg) {
-                msg.classList.add('error');
-            }
+            this.classList.add('error');
+        } else {
+            this.classList.remove('error');
+        }
+    });
+    
+    input.addEventListener('input', function() {
+        if (this.classList.contains('error') && this.value) {
+            this.classList.remove('error');
         }
     });
 });
