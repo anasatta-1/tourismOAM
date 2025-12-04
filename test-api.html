@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        h1 {
+            color: #333;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status.ok {
+            background: #28a745;
+            color: white;
+        }
+        .status.fail {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>API Connection Test <span id="status" class="status"></span></h1>
+        <p>Use this page to test your API connection and diagnose issues.</p>
+        
+        <div>
+            <button class="test-button" onclick="testBasicConnection()">1. Test Basic Connection</button>
+            <button class="test-button" onclick="testDatabaseConnection()">2. Test Database Connection</button>
+            <button class="test-button" onclick="testCreateGuest()">3. Test Create Guest</button>
+            <button class="test-button" onclick="testCreatePackage()">4. Test Create Package</button>
+            <button class="test-button" onclick="runAllTests()">Run All Tests</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        // Detect API URL - handle both file:// and http:// protocols
+        function getApiBaseUrl() {
+            const protocol = window.location.protocol;
+            const host = window.location.host;
+            const pathname = window.location.pathname;
+            
+            // If opened as file://, provide instructions
+            if (protocol === 'file:') {
+                return null; // Will show instructions
+            }
+            
+            // If in subdirectory, adjust path
+            const pathParts = pathname.split('/');
+            const projectPath = pathParts.slice(0, -1).join('/'); // Remove filename
+            
+            return window.location.origin + (projectPath || '') + '/api';
+        }
+        
+        const API_BASE_URL = getApiBaseUrl();
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.textContent = message;
+            results.appendChild(div);
+            console.log(message);
+        }
+        
+        function updateStatus(success) {
+            const status = document.getElementById('status');
+            status.textContent = success ? '✓ OK' : '✗ FAILED';
+            status.className = `status ${success ? 'ok' : 'fail'}`;
+        }
+        
+        async function testBasicConnection() {
+            if (!API_BASE_URL) {
+                log('✗ Cannot test API from file:// protocol!\n\n' +
+                    'SOLUTION: You must access this page through a web server.\n\n' +
+                    'Option 1: Use PHP built-in server:\n' +
+                    '  cd to your project directory\n' +
+                    '  php -S localhost:8000\n' +
+                    '  Then open: http://localhost:8000/test-api.html\n\n' +
+                    'Option 2: Use Apache/XAMPP/WAMP:\n' +
+                    '  Place project in htdocs/www directory\n' +
+                    '  Open: http://localhost/tourismOAM-main/test-api.html\n\n' +
+                    'Option 3: Configure your API URL manually below:', 'error');
+                updateStatus(false);
+                
+                // Add manual URL input
+                const manualInput = document.createElement('div');
+                manualInput.innerHTML = `
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border: 1px solid #ffc107; border-radius: 4px;">
+                        <strong>Manual API URL Configuration:</strong><br>
+                        <input type="text" id="manual-api-url" placeholder="http://localhost/api" 
+                               style="width: 300px; padding: 8px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px;">
+                        <button onclick="setManualApiUrl()" style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                            Set API URL
+                        </button>
+                    </div>
+                `;
+                document.getElementById('results').appendChild(manualInput);
+                return false;
+            }
+            
+            log('Testing basic API connection...', 'info');
+            log('API URL: ' + API_BASE_URL, 'info');
+            try {
+                // Try test-api.php first (direct file access)
+                let response = await fetch(API_BASE_URL + '/test-api.php');
+                
+                // If that fails, try through router
+                if (!response.ok) {
+                    response = await fetch(API_BASE_URL + '/test-api.php');
+                }
+                
+                const data = await response.json();
+                log('✓ Basic connection successful!\n' + JSON.stringify(data, null, 2), 'success');
+                updateStatus(true);
+                return true;
+            } catch (error) {
+                log('✗ Basic connection failed!\nError: ' + error.message + '\n\nAPI URL: ' + API_BASE_URL + '\n\nPossible causes:\n' +
+                    '1. API server is not running\n' +
+                    '2. Wrong API URL (check above)\n' +
+                    '3. CORS issues\n' +
+                    '4. .htaccess not working\n' +
+                    '5. PHP errors (check server logs)\n\n' +
+                    'Try accessing directly: ' + API_BASE_URL + '/test-api.php', 'error');
+                updateStatus(false);
+                return false;
+            }
+        }
+        
+        // Manual API URL setter
+        window.setManualApiUrl = function() {
+            const manualUrl = document.getElementById('manual-api-url').value;
+            if (manualUrl) {
+                window.manualApiUrl = manualUrl;
+                log('API URL set to: ' + manualUrl, 'info');
+                testBasicConnection();
+            }
+        }
+        
+        async function testDatabaseConnection() {
+            const apiUrl = window.manualApiUrl || API_BASE_URL;
+            if (!apiUrl) {
+                log('✗ Please set API URL first', 'error');
+                return false;
+            }
+            
+            log('Testing database connection...', 'info');
+            try {
+                const response = await fetch(apiUrl + '/test-connection.php');
+                const data = await response.json();
+                if (data.success) {
+                    log('✓ Database connection successful!\n' + JSON.stringify(data.data, null, 2), 'success');
+                    return true;
+                } else {
+                    log('✗ Database connection failed!\n' + data.message, 'error');
+                    return false;
+                }
+            } catch (error) {
+                log('✗ Database test failed!\nError: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function testCreateGuest() {
+            const apiUrl = window.manualApiUrl || API_BASE_URL;
+            if (!apiUrl) {
+                log('✗ Please set API URL first', 'error');
+                return false;
+            }
+            
+            log('Testing guest creation...', 'info');
+            try {
+                const response = await fetch(apiUrl + '/guests', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: 'Test User',
+                        phone_number: '+1234567890',
+                        country_of_residence: 'United States'
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    log('✓ Guest creation successful!\nGuest ID: ' + data.data.guest_id, 'success');
+                    return true;
+                } else {
+                    log('✗ Guest creation failed!\n' + data.message, 'error');
+                    return false;
+                }
+            } catch (error) {
+                log('✗ Guest creation test failed!\nError: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function testCreatePackage() {
+            const apiUrl = window.manualApiUrl || API_BASE_URL;
+            if (!apiUrl) {
+                log('✗ Please set API URL first', 'error');
+                return false;
+            }
+            
+            log('Testing package creation (wizard)...', 'info');
+            try {
+                // First create a guest
+                const guestResponse = await fetch(apiUrl + '/guests', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        full_name: 'Test Package User',
+                        phone_number: '+9876543210',
+                        country_of_residence: 'United States'
+                    })
+                });
+                
+                const guestData = await guestResponse.json();
+                if (!guestData.success) {
+                    log('✗ Could not create test guest', 'error');
+                    return false;
+                }
+                
+                // Now create package
+                const packageResponse = await fetch(apiUrl + '/packages/wizard', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        guest: {
+                            full_name: 'Test Package User',
+                            phone_number: '+9876543210',
+                            country_of_residence: 'United States'
+                        },
+                        package_name: 'Test Package',
+                        air_travel: {
+                            departure_country: 'United States',
+                            departure_city: 'New York',
+                            departure_airport: 'JFK',
+                            destination_country: 'France',
+                            destination_city: 'Paris',
+                            destination_airport: 'CDG',
+                            departure_date: '2024-06-01',
+                            trip_duration_days: 7,
+                            trip_duration_nights: 6,
+                            estimated_cost: 1500.00
+                        }
+                    })
+                });
+                
+                const packageData = await packageResponse.json();
+                if (packageData.success) {
+                    log('✓ Package creation successful!\nPackage ID: ' + packageData.data.package_id, 'success');
+                    return true;
+                } else {
+                    log('✗ Package creation failed!\n' + packageData.message, 'error');
+                    return false;
+                }
+            } catch (error) {
+                log('✗ Package creation test failed!\nError: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        async function runAllTests() {
+            document.getElementById('results').innerHTML = '';
+            log('Running all tests...\n', 'info');
+            
+            const test1 = await testBasicConnection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            if (test1) {
+                const test2 = await testDatabaseConnection();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                if (test2) {
+                    await testCreateGuest();
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await testCreatePackage();
+                }
+            }
+            
+            log('\n=== All tests completed ===', 'info');
+        }
+        
+        // Auto-run basic test on load (only if not file://)
+        window.addEventListener('load', () => {
+            if (API_BASE_URL) {
+                testBasicConnection();
+            } else {
+                log('⚠️  Please use a web server to test the API.\n\n' +
+                    'Quick Start:\n' +
+                    '1. Open terminal in project directory\n' +
+                    '2. Run: php -S localhost:8000\n' +
+                    '3. Open: http://localhost:8000/test-api.html\n\n' +
+                    'Or use the manual API URL input below.', 'info');
+            }
+        });
+    </script>
+</body>
+</html>
+
