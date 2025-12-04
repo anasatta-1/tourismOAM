@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../dashboard/dashboard.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Dashboard</span>
+            </a></li>
+            <li><a href="analytics.html" class="active">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+            <li><a href="../data-entry/data-entry.html">
+                <span class="sidebar-menu-icon">📝</span>
+                <span>Data Entry</span>
+            </a></li>
+            <li><a href="#">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span>Settings</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Analytics</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Bar -->
+        <div class="card">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Date Range:</label>
+                    <select class="form-control filter-select">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 3 months</option>
+                        <option>Last year</option>
+                        <option>Custom range</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Destination:</label>
+                    <select class="form-control filter-select">
+                        <option>All Destinations</option>
+                        <option>Paris</option>
+                        <option>Tokyo</option>
+                        <option>Bali</option>
+                        <option>New York</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category:</label>
+                    <select class="form-control filter-select">
+                        <option>All Categories</option>
+                        <option>Adventure</option>
+                        <option>Relaxation</option>
+                        <option>Cultural</option>
+                        <option>Business</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary export-btn">Export Report</button>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">$124,580</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">48</div>
+                <div class="stat-label">Destinations</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">89%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="chart-grid">
+            <!-- Bookings Over Time -->
+            <div class="chart-container">
+                <div class="chart-title">Bookings Over Time</div>
+                <div class="chart-placeholder">
+                    <div class="chart-placeholder-content">
+                        <div class="chart-placeholder-icon">📈</div>
+                        <div>Line Chart: Bookings trend over selected period</div>
+                        <div class="chart-placeholder-text">
+                            X-axis: Date | Y-axis: Number of Bookings
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Visited Destinations -->
+            <div class="chart-container">
+                <div class="chart-title">Most Visited Destinations</div>
+                <div class="chart-placeholder">
+                    <div class="chart-placeholder-content">
+                        <div class="chart-placeholder-icon">📊</div>
+                        <div>Bar Chart: Top destinations by bookings</div>
+                        <div class="chart-placeholder-text">
+                            Horizontal bars showing destination popularity
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue Breakdown -->
+        <div class="chart-container">
+            <div class="chart-title">Revenue Breakdown</div>
+            <div class="chart-placeholder chart-placeholder-small">
+                <div class="chart-placeholder-content">
+                    <div class="chart-placeholder-icon">🥧</div>
+                    <div>Pie Chart: Revenue distribution by category</div>
+                    <div class="chart-legend chart-legend-center">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--primary-color);"></div>
+                            <span>Adventure (35%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: var(--accent-color);"></div>
+                            <span>Relaxation (28%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #6c757d;"></div>
+                            <span>Cultural (22%)</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #adb5bd;"></div>
+                            <span>Business (15%)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Destinations Table -->
+        <div class="card">
+            <div class="card-header table-header-actions">
+                <h3>Top Destinations</h3>
+                <button class="btn btn-outline table-view-all-btn">View All</button>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Destination</th>
+                        <th>Bookings</th>
+                        <th>Revenue</th>
+                        <th>Growth</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Paris, France</strong></td>
+                        <td>342</td>
+                        <td>$42,580</td>
+                        <td class="growth-positive">+15%</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Tokyo, Japan</strong></td>
+                        <td>298</td>
+                        <td>$38,920</td>
+                        <td class="growth-positive">+22%</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><strong>Bali, Indonesia</strong></td>
+                        <td>267</td>
+                        <td>$28,450</td>
+                        <td class="growth-positive">+8%</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><strong>New York, USA</strong></td>
+                        <td>198</td>
+                        <td>$24,680</td>
+                        <td class="growth-positive">+12%</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><strong>London, UK</strong></td>
+                        <td>142</td>
+                        <td>$18,950</td>
+                        <td class="growth-neutral">+3%</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+</html>
+
+
