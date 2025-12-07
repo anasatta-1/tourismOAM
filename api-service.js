@@ -79,6 +79,44 @@ class ApiService {
         }
     }
 
+    // ========== AUTHENTICATION ENDPOINTS ==========
+    
+    async login(username, password) {
+        return this.request('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async register(userData) {
+        return this.request('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    async verifyPassword(username, password) {
+        return this.request('/auth/verify', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async changePassword(username, currentPassword, newPassword) {
+        return this.request('/auth/change-password', {
+            method: 'POST',
+            body: JSON.stringify({ username, current_password: currentPassword, new_password: newPassword })
+        });
+    }
+
+    async checkUser(username, email) {
+        const params = {};
+        if (username) params.username = username;
+        if (email) params.email = email;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/auth/check${queryString ? '?' + queryString : ''}`);
+    }
+
     // ========== GUEST ENDPOINTS ==========
     
     async createGuest(guestData) {

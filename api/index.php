@@ -92,6 +92,11 @@ try {
         require __DIR__ . '/endpoints/files.php';
         handleFiles($method, $segments, $data, $queryParams);
     }
+    // Route: /auth
+    elseif ($firstSegment === 'auth') {
+        require __DIR__ . '/endpoints/auth.php';
+        handleAuth($method, $segments, $data, $queryParams);
+    }
     else {
         Response::notFound('Endpoint not found');
     }
