@@ -3,7 +3,51 @@
  * Handles all API requests to the backend
  */
 
-const API_BASE_URL = window.location.origin + '/api';
+// Detect API base URL - handle subdirectories
+function getApiBaseUrl() {
+    // Try to get base path from the script's location
+    const scripts = document.getElementsByTagName('script');
+    let scriptPath = '';
+    
+    // Find api-service.js script tag
+    for (let script of scripts) {
+        if (script.src && script.src.includes('api-service.js')) {
+            const url = new URL(script.src, window.location.href);
+            scriptPath = url.pathname;
+            break;
+        }
+    }
+    
+    // If script path found, extract base path
+    if (scriptPath) {
+        // Remove 'api-service.js' from path
+        const pathParts = scriptPath.split('/').filter(p => p && !p.includes('api-service.js'));
+        const basePath = pathParts.length > 0 ? '/' + pathParts.join('/') : '';
+        return window.location.origin + basePath + '/api';
+    }
+    
+    // Fallback: use current page path
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/').filter(p => p);
+    
+    // Remove HTML file
+    if (pathParts.length > 0 && pathParts[pathParts.length - 1].endsWith('.html')) {
+        pathParts.pop();
+    }
+    
+    // Remove known subdirectories
+    const knownDirs = ['login', 'dashboard', 'wizard', 'analytics', 'data-entry'];
+    const baseParts = pathParts.filter(part => !knownDirs.includes(part));
+    
+    const basePath = baseParts.length > 0 ? '/' + baseParts.join('/') : '';
+    const apiUrl = origin + basePath + '/api';
+    
+    console.log('API Base URL:', apiUrl);
+    return apiUrl;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiService {
     constructor(baseUrl = API_BASE_URL) {

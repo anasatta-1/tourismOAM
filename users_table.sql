@@ -18,8 +18,9 @@ CREATE TABLE IF NOT EXISTS users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert default admin user (password: admin123)
--- Password hash generated with: password_hash('admin123', PASSWORD_BCRYPT)
+-- Password hash generated with: password_hash('admin123', PASSWORD_BCRYPT, ['cost' => 12])
+-- Note: Each hash is unique, so this is just a template. Use fix-admin-password.php to generate correct hash.
 INSERT INTO users (username, email, password_hash, full_name, role) 
-VALUES ('admin', 'admin@tourism.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Administrator', 'admin')
+VALUES ('admin', 'admin@tourism.com', '$2y$12$sgVDlfplttIDKWlCyBxYOOP7ms4eYcEmXhZf78oumuhO94AFvIkgO', 'Administrator', 'admin')
 ON DUPLICATE KEY UPDATE username=username;
 
