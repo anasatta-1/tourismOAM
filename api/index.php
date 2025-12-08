@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-// Handle direct PHP file access (like test-api.php, test-connection.php, debug-router.php)
+// Handle direct PHP file access (like test-api.php, test-connection.php, debug-router.php, test-auth.php)
 // Check if request is for a direct PHP file
 $requestFile = basename($path);
-if (in_array($requestFile, ['test-api.php', 'test-connection.php', 'debug-router.php']) && file_exists(__DIR__ . '/' . $requestFile)) {
+if (in_array($requestFile, ['test-api.php', 'test-connection.php', 'debug-router.php', 'test-auth.php']) && file_exists(__DIR__ . '/' . $requestFile)) {
     require __DIR__ . '/' . $requestFile;
     exit;
 }
@@ -91,6 +91,11 @@ try {
     elseif ($firstSegment === 'files') {
         require __DIR__ . '/endpoints/files.php';
         handleFiles($method, $segments, $data, $queryParams);
+    }
+    // Route: /auth
+    elseif ($firstSegment === 'auth') {
+        require __DIR__ . '/endpoints/auth.php';
+        handleAuth($method, $segments, $data, $queryParams);
     }
     else {
         Response::notFound('Endpoint not found');

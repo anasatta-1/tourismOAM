@@ -7,8 +7,20 @@ document.head.appendChild(apiScript);
 
 // Wait for API service to load
 apiScript.onload = function() {
-    initializeDataEntry();
+    if (checkAuth()) {
+        initializeDataEntry();
+    }
 };
+
+// Check authentication
+function checkAuth() {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') || sessionStorage.getItem('isAuthenticated');
+    if (isAuthenticated !== 'true') {
+        window.location.href = '../login/login.html';
+        return false;
+    }
+    return true;
+}
 
 function initializeDataEntry() {
     // Data type switching

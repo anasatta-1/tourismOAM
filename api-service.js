@@ -3,7 +3,51 @@
  * Handles all API requests to the backend
  */
 
-const API_BASE_URL = window.location.origin + '/api';
+// Detect API base URL - handle subdirectories
+function getApiBaseUrl() {
+    // Try to get base path from the script's location
+    const scripts = document.getElementsByTagName('script');
+    let scriptPath = '';
+    
+    // Find api-service.js script tag
+    for (let script of scripts) {
+        if (script.src && script.src.includes('api-service.js')) {
+            const url = new URL(script.src, window.location.href);
+            scriptPath = url.pathname;
+            break;
+        }
+    }
+    
+    // If script path found, extract base path
+    if (scriptPath) {
+        // Remove 'api-service.js' from path
+        const pathParts = scriptPath.split('/').filter(p => p && !p.includes('api-service.js'));
+        const basePath = pathParts.length > 0 ? '/' + pathParts.join('/') : '';
+        return window.location.origin + basePath + '/api';
+    }
+    
+    // Fallback: use current page path
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    const pathParts = pathname.split('/').filter(p => p);
+    
+    // Remove HTML file
+    if (pathParts.length > 0 && pathParts[pathParts.length - 1].endsWith('.html')) {
+        pathParts.pop();
+    }
+    
+    // Remove known subdirectories
+    const knownDirs = ['login', 'dashboard', 'wizard', 'analytics', 'data-entry'];
+    const baseParts = pathParts.filter(part => !knownDirs.includes(part));
+    
+    const basePath = baseParts.length > 0 ? '/' + baseParts.join('/') : '';
+    const apiUrl = origin + basePath + '/api';
+    
+    console.log('API Base URL:', apiUrl);
+    return apiUrl;
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiService {
     constructor(baseUrl = API_BASE_URL) {
@@ -77,6 +121,44 @@ class ApiService {
             
             throw error;
         }
+    }
+
+    // ========== AUTHENTICATION ENDPOINTS ==========
+    
+    async login(username, password) {
+        return this.request('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async register(userData) {
+        return this.request('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    async verifyPassword(username, password) {
+        return this.request('/auth/verify', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async changePassword(username, currentPassword, newPassword) {
+        return this.request('/auth/change-password', {
+            method: 'POST',
+            body: JSON.stringify({ username, current_password: currentPassword, new_password: newPassword })
+        });
+    }
+
+    async checkUser(username, email) {
+        const params = {};
+        if (username) params.username = username;
+        if (email) params.email = email;
+        const queryString = new URLSearchParams(params).toString();
+        return this.request(`/auth/check${queryString ? '?' + queryString : ''}`);
     }
 
     // ========== GUEST ENDPOINTS ==========
