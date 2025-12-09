@@ -15,8 +15,13 @@ class Database {
         
         try {
             $this->pdo = new PDO($dsn, $db['username'], $db['password'], $db['options']);
+            // Set PDO to throw exceptions on errors (additional safety)
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Disable emulated prepared statements (use native prepared statements)
+            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (PDOException $e) {
-            Response::error('Database connection failed: ' . $e->getMessage(), 500);
+            // Don't expose database connection details in production
+            Response::error('Database connection failed', 500);
         }
     }
     

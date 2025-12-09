@@ -22,6 +22,56 @@ function sanitizeInput($data) {
     return htmlspecialchars(strip_tags(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
+/**
+ * Validate and sanitize email
+ */
+function validateEmail($email) {
+    $email = filter_var(trim($email), FILTER_SANITIZE_EMAIL);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        Response::error('Invalid email format', 400);
+    }
+    return $email;
+}
+
+/**
+ * Validate password strength
+ */
+function validatePassword($password) {
+    if (strlen($password) < 8) {
+        Response::error('Password must be at least 8 characters long', 400);
+    }
+    // Optional: Add more strength requirements
+    // if (!preg_match('/[A-Z]/', $password)) {
+    //     Response::error('Password must contain at least one uppercase letter', 400);
+    // }
+    return $password;
+}
+
+/**
+ * Validate username format
+ */
+function validateUsername($username) {
+    $username = trim($username);
+    if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+        Response::error('Username must be 3-20 characters and contain only letters, numbers, and underscores', 400);
+    }
+    return $username;
+}
+
+/**
+ * Hash password using bcrypt
+ */
+function hashPassword($password) {
+    return password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+}
+
+/**
+ * Verify password against hash
+ */
+function verifyPassword($password, $hash) {
+    return password_verify($password, $hash);
+}
+
 function calculatePackageTotal($pdo, $packageId) {
     $total = 0;
     

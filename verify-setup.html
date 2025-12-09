@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Setup Verification</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        .test { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .success { border-left: 4px solid #28a745; }
+        .error { border-left: 4px solid #dc3545; }
+        .info { border-left: 4px solid #17a2b8; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 4px; overflow: auto; max-height: 300px; }
+        .status { display: inline-block; padding: 5px 10px; border-radius: 4px; font-weight: bold; margin-left: 10px; }
+        .status.ok { background: #d4edda; color: #155724; }
+        .status.fail { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>✅ Tourism Admin - Setup Verification</h1>
+    <p>This page will verify that everything is connected and working correctly.</p>
+    
+    <div class="test info">
+        <h3>1. API URL Detection</h3>
+        <button onclick="checkUrl()">Check URL</button>
+        <div id="urlResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>2. API Endpoint Test</h3>
+        <button onclick="testApi()">Test API</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>3. Database Connection</h3>
+        <button onclick="testDB()">Test Database</button>
+        <div id="dbResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>4. Get Packages</h3>
+        <button onclick="testPackages()">Get Packages</button>
+        <div id="packagesResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>5. Get Guests</h3>
+        <button onclick="testGuests()">Get Guests</button>
+        <div id="guestsResult"></div>
+    </div>
+    
+    <div class="test">
+        <h3>6. Analytics Overview</h3>
+        <button onclick="testAnalytics()">Get Analytics</button>
+        <div id="analyticsResult"></div>
+    </div>
+    
+    <div class="test info">
+        <h3>📝 Summary</h3>
+        <p id="summary">Run all tests above to see the summary.</p>
+    </div>
+    
+    <script src="api-service.js"></script>
+    <script>
+        let testResults = {};
+        
+        function checkUrl() {
+            const result = document.getElementById('urlResult');
+            const info = {
+                'Current Page': window.location.href,
+                'Origin': window.location.origin,
+                'Pathname': window.location.pathname,
+                'Detected API URL': api.baseUrl,
+                'Expected': window.location.origin + '/anas/api'
+            };
+            
+            const isCorrect = api.baseUrl === (window.location.origin + '/anas/api');
+            result.innerHTML = `<pre>${JSON.stringify(info, null, 2)}</pre>
+                <span class="status ${isCorrect ? 'ok' : 'fail'}">${isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>`;
+            result.parentElement.className = `test ${isCorrect ? 'success' : 'error'}`;
+            testResults.url = isCorrect;
+            updateSummary();
+        }
+        
+        async function testApi() {
+            const result = document.getElementById('apiResult');
+            result.innerHTML = 'Testing...';
+            try {
+                const response = await fetch(api.baseUrl + '/test-api.php');
+                const text = await response.text();
+                const isOk = response.ok;
+                result.innerHTML = `<pre>Status: ${response.status}\n\n${text}</pre>
+                    <span class="status ${isOk ? 'ok' : 'fail'}">${isOk ? '✓ Working' : '✗ Failed'}</span>`;
+                result.parentElement.className = `test ${isOk ? 'success' : 'error'}`;
+                testResults.api = isOk;
+            } catch (error) {
+                result.innerHTML = `<pre>ERROR: ${error.message}</pre><span class="status fail">✗ Failed</span>`;
+                result.parentElement.className = 'test error';
+                testResults.api = false;
+            }
+            updateSummary();
+        }
+        
+        async function testDB() {
+            const result = document.getElementById('dbResult');
+            result.innerHTML = 'Testing...';
+            try {
+                const response = await fetch(api.baseUrl + '/test-connection.php');
+                const data = await response.json();
+                const isOk = data.success;
+                result.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>
+                    <span class="status ${isOk ? 'ok' : 'fail'}">${isOk ? '✓ Connected' : '✗ Failed'}</span>`;
+                result.parentElement.className = `test ${isOk ? 'success' : 'error'}`;
+                testResults.db = isOk;
+            } catch (error) {
+                result.innerHTML = `<pre>ERROR: ${error.message}</pre><span class="status fail">✗ Failed</span>`;
+                result.parentElement.className = 'test error';
+                testResults.db = false;
+            }
+            updateSummary();
+        }
+        
+        async function testPackages() {
+            const result = document.getElementById('packagesResult');
+            result.innerHTML = 'Testing...';
+            try {
+                const response = await api.getPackages();
+                const packages = (response.data && Array.isArray(response.data.data)) 
+                    ? response.data.data 
+                    : (Array.isArray(response.data) ? response.data : []);
+                const isOk = true;
+                result.innerHTML = `<pre>Success! Found ${packages.length} packages\n\n${JSON.stringify(response, null, 2).substring(0, 500)}...</pre>
+                    <span class="status ok">✓ Working (${packages.length} packages)</span>`;
+                result.parentElement.className = 'test success';
+                testResults.packages = isOk;
+            } catch (error) {
+                result.innerHTML = `<pre>ERROR: ${error.message}</pre><span class="status fail">✗ Failed</span>`;
+                result.parentElement.className = 'test error';
+                testResults.packages = false;
+            }
+            updateSummary();
+        }
+        
+        async function testGuests() {
+            const result = document.getElementById('guestsResult');
+            result.innerHTML = 'Testing...';
+            try {
+                const response = await api.getGuests();
+                const guests = (response.data && Array.isArray(response.data.data)) 
+                    ? response.data.data 
+                    : (Array.isArray(response.data) ? response.data : []);
+                const isOk = true;
+                result.innerHTML = `<pre>Success! Found ${guests.length} guests\n\n${JSON.stringify(response, null, 2).substring(0, 500)}...</pre>
+                    <span class="status ok">✓ Working (${guests.length} guests)</span>`;
+                result.parentElement.className = 'test success';
+                testResults.guests = isOk;
+            } catch (error) {
+                result.innerHTML = `<pre>ERROR: ${error.message}</pre><span class="status fail">✗ Failed</span>`;
+                result.parentElement.className = 'test error';
+                testResults.guests = false;
+            }
+            updateSummary();
+        }
+        
+        async function testAnalytics() {
+            const result = document.getElementById('analyticsResult');
+            result.innerHTML = 'Testing...';
+            try {
+                const response = await api.getAnalyticsOverview();
+                const isOk = true;
+                result.innerHTML = `<pre>Success!\n\n${JSON.stringify(response, null, 2).substring(0, 500)}...</pre>
+                    <span class="status ok">✓ Working</span>`;
+                result.parentElement.className = 'test success';
+                testResults.analytics = isOk;
+            } catch (error) {
+                result.innerHTML = `<pre>ERROR: ${error.message}</pre><span class="status fail">✗ Failed</span>`;
+                result.parentElement.className = 'test error';
+                testResults.analytics = false;
+            }
+            updateSummary();
+        }
+        
+        function updateSummary() {
+            const total = Object.keys(testResults).length;
+            const passed = Object.values(testResults).filter(v => v === true).length;
+            const summary = document.getElementById('summary');
+            
+            if (total === 0) {
+                summary.innerHTML = 'Run the tests above to verify your setup.';
+                return;
+            }
+            
+            const percentage = Math.round((passed / total) * 100);
+            summary.innerHTML = `
+                <strong>Test Results: ${passed}/${total} passed (${percentage}%)</strong><br>
+                ${passed === total ? 
+                    '✅ <strong>Everything is working correctly!</strong> Your site is fully connected.' :
+                    '⚠️ Some tests failed. Check the details above and fix any issues.'}
+            `;
+        }
+        
+        // Auto-check URL on load
+        window.onload = checkUrl;
+    </script>
+</body>
+</html>
+
