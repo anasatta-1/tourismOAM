@@ -3,7 +3,24 @@
  * Handles all API requests to the backend
  */
 
-const API_BASE_URL = window.location.origin + '/api';
+// Auto-detect API base URL based on current location
+// Handles both root (/api) and subdirectory (/anas/api) cases
+const getApiBaseUrl = () => {
+    const origin = window.location.origin;
+    const pathname = window.location.pathname;
+    
+    // Check if we're in a subdirectory (like /anas/)
+    const pathParts = pathname.split('/').filter(p => p);
+    if (pathParts.length > 0 && pathParts[0] !== 'api') {
+        // We're in a subdirectory, add it to the API path
+        return `${origin}/${pathParts[0]}/api`;
+    }
+    
+    // Default to root /api
+    return `${origin}/api`;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiService {
     constructor(baseUrl = API_BASE_URL) {
@@ -29,10 +46,10 @@ class ApiService {
         }
 
         // Log request for debugging
-        console.log('API Request:', {
+        console.log('🌐 API Request:', {
             url: url,
             method: config.method || 'GET',
-            body: config.body
+            body: config.body ? (typeof config.body === 'string' ? config.body.substring(0, 200) : config.body) : null
         });
 
         try {
@@ -55,10 +72,15 @@ class ApiService {
                 throw new Error(data.message || `HTTP error! status: ${response.status}`);
             }
 
+            console.log('✅ API Response:', {
+                url: url,
+                status: response.status,
+                data: data
+            });
             return data;
         } catch (error) {
             // Enhanced error logging
-            console.error('API Error Details:', {
+            console.error('❌ API Error Details:', {
                 url: url,
                 method: config.method || 'GET',
                 error: error.message,
@@ -361,6 +383,26 @@ class ApiService {
     async getSalesByDestination(params = {}) {
         const queryString = new URLSearchParams(params).toString();
         return this.request(`/analytics/sales/by-destination${queryString ? '?' + queryString : ''}`);
+    }
+
+    // ========== AUTH ENDPOINTS ==========
+
+    async login(username, password) {
+        return this.request('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password })
+        });
+    }
+
+    async register(userData) {
+        return this.request('/auth/register', {
+            method: 'POST',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    async getCurrentUser() {
+        return this.request('/auth/me');
     }
 }
 

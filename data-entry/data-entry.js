@@ -1,14 +1,20 @@
 // Data Entry Page JavaScript
 
-// Load API service
-const apiScript = document.createElement('script');
-apiScript.src = '../api-service.js';
-document.head.appendChild(apiScript);
-
-// Wait for API service to load
-apiScript.onload = function() {
+// API service should be loaded via script tag in HTML
+// Check if api is already available, if not wait for it
+if (typeof api === 'undefined') {
+    // Wait for api-service.js to load
+    window.addEventListener('load', function() {
+        if (typeof api !== 'undefined') {
+            initializeDataEntry();
+        } else {
+            console.error('API service not loaded. Make sure api-service.js is included in the HTML.');
+        }
+    });
+} else {
+    // API is already loaded
     initializeDataEntry();
-};
+}
 
 function initializeDataEntry() {
     // Data type switching
