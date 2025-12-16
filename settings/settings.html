@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page - Tourism Admin Management System</title>
+    <title>Settings - Tourism Admin Management System</title>
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="settings.css">
 </head>
 <body>
     <!-- Sidebar -->
@@ -14,7 +14,7 @@
             <div class="sidebar-logo">Tourism Admin</div>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="dashboard.html" class="active">
+            <li><a href="../dashboard/dashboard.html">
                 <span class="sidebar-menu-icon">📊</span>
                 <span>Main</span>
             </a></li>
@@ -34,7 +34,7 @@
                 <span class="sidebar-menu-icon">📦</span>
                 <span>Packages</span>
             </a></li>
-            <li><a href="../settings/settings.html">
+            <li><a href="settings.html" class="active">
                 <span class="sidebar-menu-icon">⚙️</span>
                 <span>Settings</span>
             </a></li>
@@ -43,7 +43,7 @@
 
     <!-- Top Navigation -->
     <nav class="top-nav">
-        <div class="top-nav-title">Main Page</div>
+        <div class="top-nav-title">Settings</div>
         <div class="profile-menu">
             <div class="profile-avatar">AD</div>
             <div>
@@ -55,23 +55,32 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <div class="main-page-container">
-            <div class="main-buttons-grid">
-                <a href="../data-entry/data-entry.html" class="main-page-button">
-                    <div class="main-button-icon">📝</div>
-                    <div class="main-button-title">Data Entry</div>
-                    <div class="main-button-description">Enter and manage travel data</div>
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="quick-actions">
+                <a href="#" class="quick-action-btn">
+                    <div class="quick-action-icon">🌍</div>
+                    <div class="quick-action-title">Add Destination</div>
                 </a>
-                <a href="../wizard/wizard.html" class="main-page-button">
-                    <div class="main-button-icon">✨</div>
-                    <div class="main-button-title">Wizard</div>
-                    <div class="main-button-description">Create travel packages step by step</div>
+                <a href="#" class="quick-action-btn">
+                    <div class="quick-action-icon">📦</div>
+                    <div class="quick-action-title">Add Package</div>
+                </a>
+                <a href="#" class="quick-action-btn">
+                    <div class="quick-action-icon">👥</div>
+                    <div class="quick-action-title">Manage Users</div>
+                </a>
+                <a href="../analytics/analytics.html" class="quick-action-btn">
+                    <div class="quick-action-icon">📊</div>
+                    <div class="quick-action-title">View Analytics</div>
                 </a>
             </div>
         </div>
     </main>
-
-    <script src="../api-service.js"></script>
-    <script src="dashboard.js"></script>
 </body>
 </html>
+
+

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Package Quotation - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="quotation.css">
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Travel Package Quotation</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="loading" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Generating quotation...</p>
+        </div>
+
+        <div id="quotation-content" style="display: none;">
+            <!-- Quotation Header -->
+            <div class="quotation-header">
+                <div class="quotation-header-left">
+                    <h1>Travel Package Quotation</h1>
+                    <div class="quotation-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Quotation Number:</span>
+                            <span class="meta-value" id="quotation-number">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Date:</span>
+                            <span class="meta-value" id="quotation-date">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Status:</span>
+                            <span class="meta-value" id="quotation-status">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="quotation-header-right">
+                    <div class="quotation-logo">Tourism Admin</div>
+                </div>
+            </div>
+
+            <!-- Guest Information -->
+            <div class="card quotation-section">
+                <h2 class="section-title">Guest Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Full Name:</span>
+                        <span class="info-value" id="guest-name">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Phone Number:</span>
+                        <span class="info-value" id="guest-phone">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Country of Residence:</span>
+                        <span class="info-value" id="guest-country">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Package Information -->
+            <div class="card quotation-section">
+                <h2 class="section-title">Package Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Package Name:</span>
+                        <span class="info-value" id="package-name">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Package ID:</span>
+                        <span class="info-value" id="package-id">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Air Travel -->
+            <div class="card quotation-section" id="air-travel-section" style="display: none;">
+                <h2 class="section-title">Air Travel</h2>
+                <div class="info-grid" id="air-travel-details">
+                    <!-- Air travel details will be populated here -->
+                </div>
+            </div>
+
+            <!-- Accommodations -->
+            <div class="card quotation-section" id="accommodations-section" style="display: none;">
+                <h2 class="section-title">Accommodations</h2>
+                <div id="accommodations-list">
+                    <!-- Accommodations will be populated here -->
+                </div>
+            </div>
+
+            <!-- Tours -->
+            <div class="card quotation-section" id="tours-section" style="display: none;">
+                <h2 class="section-title">Tours</h2>
+                <div id="tours-list">
+                    <!-- Tours will be populated here -->
+                </div>
+            </div>
+
+            <!-- Visas -->
+            <div class="card quotation-section" id="visas-section" style="display: none;">
+                <h2 class="section-title">Visas</h2>
+                <div id="visas-list">
+                    <!-- Visas will be populated here -->
+                </div>
+            </div>
+
+            <!-- Cost Breakdown -->
+            <div class="card quotation-section">
+                <h2 class="section-title">Cost Breakdown</h2>
+                <div class="cost-breakdown">
+                    <div class="cost-item">
+                        <span class="cost-label">Air Travel:</span>
+                        <span class="cost-value" id="cost-air-travel">$0.00</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">Accommodations:</span>
+                        <span class="cost-value" id="cost-accommodations">$0.00</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">Tours:</span>
+                        <span class="cost-value" id="cost-tours">$0.00</span>
+                    </div>
+                    <div class="cost-item">
+                        <span class="cost-label">Visas:</span>
+                        <span class="cost-value" id="cost-visas">$0.00</span>
+                    </div>
+                    <div class="cost-total">
+                        <span class="cost-label">Total Amount:</span>
+                        <span class="cost-value" id="cost-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quotation Footer -->
+            <div class="quotation-footer">
+                <div class="quotation-notes">
+                    <h3>Notes</h3>
+                    <p id="quotation-notes">This quotation is valid for 30 days from the date of issue.</p>
+                </div>
+                <div class="quotation-actions">
+                    <button class="btn btn-outline" id="download-pdf-btn">Download PDF</button>
+                    <button class="btn btn-primary" id="view-contract-btn">View Contract</button>
+                    <button class="btn btn-secondary" id="back-to-dashboard-btn">Back to Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="error-message" class="error-container" style="display: none;">
+            <div class="error-card">
+                <h2>Access Denied</h2>
+                <p>This quotation page can only be accessed after completing the wizard confirmation.</p>
+                <button class="btn btn-primary" onclick="window.location.href='../wizard/wizard.html'">Go to Wizard</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../api-service.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // Initialize API service
+        const api = new ApiService();
+    </script>
+    <script src="quotation.js"></script>
+</body>
+</html>
+

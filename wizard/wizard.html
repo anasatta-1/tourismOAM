@@ -16,7 +16,7 @@
         <ul class="sidebar-menu">
             <li><a href="../dashboard/dashboard.html">
                 <span class="sidebar-menu-icon">📊</span>
-                <span>Dashboard</span>
+                <span>Main</span>
             </a></li>
             <li><a href="../analytics/analytics.html">
                 <span class="sidebar-menu-icon">📈</span>
@@ -30,7 +30,11 @@
                 <span class="sidebar-menu-icon">📝</span>
                 <span>Data Entry</span>
             </a></li>
-            <li><a href="#">
+            <li><a href="../package-management/package-management.html">
+                <span class="sidebar-menu-icon">📦</span>
+                <span>Packages</span>
+            </a></li>
+            <li><a href="../settings/settings.html">
                 <span class="sidebar-menu-icon">⚙️</span>
                 <span>Settings</span>
             </a></li>
@@ -60,6 +64,43 @@
             <!-- Progress Bar -->
             <div class="progress-bar">
                 <div class="progress-fill" style="width: 14.3%;" id="progressFill"></div>
+            </div>
+
+            <!-- Process Timeline -->
+            <div class="card timeline-card">
+                <div class="process-timeline">
+                    <div class="timeline-line">
+                        <div class="timeline-progress-fill" id="wizard-timeline-progress-fill"></div>
+                    </div>
+                    <div class="timeline-step pending" data-step="1">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Guest Info</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="2">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Package</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="3">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Air Travel</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="4">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Accommodation</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="5">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Tours</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="6">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Visas</div>
+                    </div>
+                    <div class="timeline-step pending" data-step="7">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-label">Confirmation</div>
+                    </div>
+                </div>
             </div>
 
             <!-- Steps -->
@@ -455,5 +496,3 @@
     <script src="wizard.js"></script>
 </body>
 </html>
-
-
