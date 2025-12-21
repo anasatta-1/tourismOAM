@@ -404,6 +404,81 @@ class ApiService {
     async getCurrentUser() {
         return this.request('/auth/me');
     }
+
+    // ========== QUOTATION ENDPOINTS ==========
+
+    async createQuotation(packageId, quotationData = {}) {
+        return this.request(`/packages/${packageId}/quotations`, {
+            method: 'POST',
+            body: JSON.stringify(quotationData)
+        });
+    }
+
+    async getQuotations(packageId) {
+        return this.request(`/packages/${packageId}/quotations`);
+    }
+
+    async getQuotation(packageId, quotationId) {
+        return this.request(`/packages/${packageId}/quotations/${quotationId}`);
+    }
+
+    async sendQuotation(packageId, quotationId) {
+        return this.request(`/packages/${packageId}/quotations/${quotationId}/send`, {
+            method: 'POST'
+        });
+    }
+
+    async updateQuotationStatus(packageId, quotationId, status) {
+        return this.request(`/packages/${packageId}/quotations/${quotationId}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status })
+        });
+    }
+
+    async downloadQuotationPDF(packageId, quotationId) {
+        return this.request(`/packages/${packageId}/quotations/${quotationId}/pdf`);
+    }
+
+    // ========== CONTRACT ENDPOINTS ==========
+
+    async createContract(packageId, contractData = {}) {
+        return this.request(`/packages/${packageId}/contracts`, {
+            method: 'POST',
+            body: JSON.stringify(contractData)
+        });
+    }
+
+    async getContract(packageId) {
+        return this.request(`/packages/${packageId}/contracts`);
+    }
+
+    async updateContract(packageId, contractData) {
+        // Update contract using PATCH on status endpoint or create new one
+        // Since there's no direct update endpoint, we'll use the status endpoint for notes
+        // For now, we'll create/update by posting again (the API handles ON DUPLICATE KEY UPDATE)
+        return this.request(`/packages/${packageId}/contracts`, {
+            method: 'POST',
+            body: JSON.stringify(contractData)
+        });
+    }
+
+    async downloadContractPDF(packageId) {
+        // This would download from server, but we're using client-side generation
+        return this.request(`/packages/${packageId}/contracts/pdf`);
+    }
+
+    async sendContract(packageId) {
+        return this.request(`/packages/${packageId}/contracts/send`, {
+            method: 'POST'
+        });
+    }
+
+    async updateContractStatus(packageId, status) {
+        return this.request(`/packages/${packageId}/contracts/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status })
+        });
+    }
 }
 
 // Create global instance

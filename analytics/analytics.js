@@ -22,15 +22,20 @@ async function loadAnalyticsData() {
             console.warn('Could not load analytics overview:', error);
         }
         
-        // Load packages for calculations
-        const packagesResponse = await api.getPackages();
+        // Load packages for calculations - fetch all packages (no limit)
+        const packagesResponse = await api.getPackages({ limit: 1000 }); // Get up to 1000 packages
         console.log('✅ Packages response:', packagesResponse);
         
-        // API returns { data: { data: [...], pagination: {...} } }
+        // API returns { success: true, data: { data: [...], pagination: {...} } }
         // So we need to access response.data.data
-        const packages = (packagesResponse.data && Array.isArray(packagesResponse.data.data)) 
-            ? packagesResponse.data.data 
-            : (Array.isArray(packagesResponse.data) ? packagesResponse.data : []);
+        let packages = [];
+        if (packagesResponse.success && packagesResponse.data) {
+            if (Array.isArray(packagesResponse.data.data)) {
+                packages = packagesResponse.data.data;
+            } else if (Array.isArray(packagesResponse.data)) {
+                packages = packagesResponse.data;
+            }
+        }
         console.log(`📊 Found ${packages.length} packages`);
         
         // Load sales by destination
@@ -42,15 +47,78 @@ async function loadAnalyticsData() {
             console.warn('Could not load sales by destination:', error);
         }
         
+        // Update overview cards
+        updateOverviewCards(packages, analyticsData);
+        
         // Update stats row
         updateStatsRow(packages, analyticsData);
         
         // Update top destinations table
         updateTopDestinationsTable(packages, salesByDestination);
         
+        // Update recent activity
+        updateRecentActivity(packages);
+        
     } catch (error) {
         console.error('Error loading analytics data:', error);
         showAnalyticsError('Unable to load analytics data. Please check your connection.');
+    }
+}
+
+/**
+ * Update overview cards with real data
+ */
+function updateOverviewCards(packages, analyticsData) {
+    // Ensure packages is an array
+    if (!Array.isArray(packages)) {
+        console.warn('⚠️ Packages is not an array in updateOverviewCards:', packages);
+        packages = [];
+    }
+    
+    // Total Bookings
+    const totalBookings = packages.length || 0;
+    const bookingsCard = document.querySelector('.overview-card:nth-child(1) .overview-card-value');
+    if (bookingsCard) {
+        bookingsCard.textContent = formatNumber(totalBookings);
+    }
+    
+    // Calculate unique destinations from packages
+    // The list endpoint includes has_accommodations, has_air_travel flags
+    // To get accurate destination count, we'd need to fetch full package details
+    // For now, we'll count packages that have travel/accommodation data as having destinations
+    const destinationsWithData = packages.filter(pkg => 
+        pkg.has_air_travel || pkg.has_accommodations
+    ).length;
+    
+    // Active Destinations - approximate count based on packages with travel/accommodation data
+    const destinationsCard = document.querySelector('.overview-card:nth-child(2) .overview-card-value');
+    if (destinationsCard) {
+        // For a more accurate count, we could fetch full package details
+        // But for performance, we'll use the approximate count
+        destinationsCard.textContent = destinationsWithData || 0;
+    }
+    
+    // Pending Tasks (packages with status 'draft' or 'quotation_sent')
+    const pendingPackages = Array.isArray(packages) ? packages.filter(pkg => 
+        pkg.status === 'draft' || pkg.status === 'quotation_sent'
+    ) : [];
+    const pendingCard = document.querySelector('.overview-card:nth-child(3) .overview-card-value');
+    if (pendingCard) {
+        pendingCard.textContent = pendingPackages.length || 0;
+    }
+    
+    // Revenue
+    let totalRevenue = 0;
+    if (analyticsData && (analyticsData.summary?.total_sales || analyticsData.total_revenue)) {
+        totalRevenue = analyticsData.summary?.total_sales || analyticsData.total_revenue || 0;
+    } else if (Array.isArray(packages)) {
+        totalRevenue = packages.reduce((sum, pkg) => {
+            return sum + (parseFloat(pkg.total_estimated_cost) || 0);
+        }, 0);
+    }
+    const revenueCard = document.querySelector('.overview-card:nth-child(4) .overview-card-value');
+    if (revenueCard) {
+        revenueCard.textContent = formatCurrency(totalRevenue);
     }
 }
 
@@ -257,6 +325,125 @@ function formatCurrency(amount) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     }).format(amount);
+}
+
+/**
+ * Update recent activity log with real data
+ */
+function updateRecentActivity(packages) {
+    const activityLog = document.querySelector('.activity-log');
+    if (!activityLog) return;
+    
+    // Ensure packages is an array
+    if (!Array.isArray(packages)) {
+        console.warn('⚠️ Packages is not an array in updateRecentActivity:', packages);
+        packages = [];
+    }
+    
+    // Clear existing activity items
+    activityLog.innerHTML = '';
+    
+    // Sort packages by created_at (most recent first)
+    const sortedPackages = [...packages].sort((a, b) => {
+        const dateA = new Date(a.created_at || 0);
+        const dateB = new Date(b.created_at || 0);
+        return dateB - dateA;
+    });
+    
+    // Show most recent 6 packages
+    const recentPackages = sortedPackages.slice(0, 6);
+    
+    recentPackages.forEach(pkg => {
+        const activityItem = createActivityItem(pkg);
+        activityLog.appendChild(activityItem);
+    });
+    
+    // If no packages, show message
+    if (packages.length === 0) {
+        const noActivity = document.createElement('div');
+        noActivity.className = 'activity-item';
+        noActivity.innerHTML = `
+            <div class="activity-content">
+                <div class="activity-title">No recent activity</div>
+                <div class="activity-time">Create a new package to get started</div>
+            </div>
+        `;
+        activityLog.appendChild(noActivity);
+    }
+}
+
+/**
+ * Create an activity item from package data
+ */
+function createActivityItem(pkg) {
+    const item = document.createElement('div');
+    item.className = 'activity-item';
+    
+    const statusIcon = getStatusIcon(pkg.status);
+    const statusText = getStatusText(pkg.status);
+    const timeAgo = getTimeAgo(pkg.created_at);
+    const packageName = pkg.package_name || 'Unnamed Package';
+    const guestName = pkg.guest_name || 'Unknown Guest';
+    
+    item.innerHTML = `
+        <div class="activity-icon booking">${statusIcon}</div>
+        <div class="activity-content">
+            <div class="activity-title">${packageName} - ${statusText} (Guest: ${guestName})</div>
+            <div class="activity-time">${timeAgo}</div>
+        </div>
+    `;
+    
+    return item;
+}
+
+/**
+ * Get icon for package status
+ */
+function getStatusIcon(status) {
+    const icons = {
+        'draft': '📝',
+        'quotation_sent': '📧',
+        'contract_sent': '📄',
+        'confirmed': '✅',
+        'completed': '🎉',
+        'cancelled': '❌'
+    };
+    return icons[status] || '📋';
+}
+
+/**
+ * Get readable status text
+ */
+function getStatusText(status) {
+    const texts = {
+        'draft': 'Draft Package',
+        'quotation_sent': 'Quotation Sent',
+        'contract_sent': 'Contract Sent',
+        'confirmed': 'Confirmed',
+        'completed': 'Completed',
+        'cancelled': 'Cancelled'
+    };
+    return texts[status] || status;
+}
+
+/**
+ * Get time ago string
+ */
+function getTimeAgo(dateString) {
+    if (!dateString) return 'Unknown time';
+    
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
 }
 
 /**

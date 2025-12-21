@@ -16,7 +16,7 @@
         <ul class="sidebar-menu">
             <li><a href="../dashboard/dashboard.html">
                 <span class="sidebar-menu-icon">📊</span>
-                <span>Dashboard</span>
+                <span>Main</span>
             </a></li>
             <li><a href="../analytics/analytics.html">
                 <span class="sidebar-menu-icon">📈</span>
@@ -30,7 +30,11 @@
                 <span class="sidebar-menu-icon">📝</span>
                 <span>Data Entry</span>
             </a></li>
-            <li><a href="#">
+            <li><a href="../package-management/package-management.html">
+                <span class="sidebar-menu-icon">📦</span>
+                <span>Packages</span>
+            </a></li>
+            <li><a href="../settings/settings.html">
                 <span class="sidebar-menu-icon">⚙️</span>
                 <span>Settings</span>
             </a></li>
@@ -52,55 +56,10 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="data-entry-container">
-            <!-- Data Type Sidebar -->
-            <div class="data-sidebar">
-                <div class="data-sidebar-card">
-                    <h4 class="data-sidebar-title">Select Data Type</h4>
-                    <ul class="data-type-list">
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link active" data-type="guest">
-                                <span class="data-type-icon">👤</span>
-                                <span>Guest</span>
-                            </a>
-                        </li>
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link" data-type="package">
-                                <span class="data-type-icon">📦</span>
-                                <span>Travel Package</span>
-                            </a>
-                        </li>
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link" data-type="air-travel">
-                                <span class="data-type-icon">✈️</span>
-                                <span>Air Travel</span>
-                            </a>
-                        </li>
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link" data-type="accommodation">
-                                <span class="data-type-icon">🏨</span>
-                                <span>Accommodation</span>
-                            </a>
-                        </li>
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link" data-type="tour">
-                                <span class="data-type-icon">🎯</span>
-                                <span>Tour</span>
-                            </a>
-                        </li>
-                        <li class="data-type-item">
-                            <a href="#" class="data-type-link" data-type="visa">
-                                <span class="data-type-icon">📋</span>
-                                <span>Visa</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
             <!-- Form Content -->
             <div class="form-content">
                 <!-- Guest Form -->
-                <div class="form-content-type active" id="guest-form">
+                <div class="form-content-type" id="guest-form">
                     <div class="form-section">
                         <h3 class="section-title">Guest Information</h3>
                         <div class="form-row-2">
@@ -468,18 +427,55 @@
 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <button class="btn btn-secondary">Cancel</button>
-                    <button class="btn btn-outline">Save & Add Another</button>
-                    <button class="btn btn-primary">Save</button>
+                    <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    <button class="btn btn-outline" id="saveAndAddAnotherBtn">Save & Add Another</button>
+                    <button class="btn btn-primary" id="saveBtn">Save</button>
+                </div>
+            </div>
+
+            <!-- Process Timeline Sidebar -->
+            <div class="timeline-sidebar">
+                <div class="card timeline-card">
+                    <h4 class="timeline-sidebar-title">Progress</h4>
+                    <div class="process-timeline-vertical">
+                        <div class="timeline-line-vertical">
+                            <div class="timeline-progress-fill-vertical" id="timeline-progress-fill"></div>
+                        </div>
+                        <div class="timeline-step-vertical finished" data-step="1">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Guest Info</div>
+                        </div>
+                        <div class="timeline-step-vertical ongoing" data-step="2">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Package</div>
+                        </div>
+                        <div class="timeline-step-vertical pending" data-step="3">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Air Travel</div>
+                        </div>
+                        <div class="timeline-step-vertical pending" data-step="4">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Accommodation</div>
+                        </div>
+                        <div class="timeline-step-vertical pending" data-step="5">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Tour</div>
+                        </div>
+                        <div class="timeline-step-vertical pending" data-step="6">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-label">Visa</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script src="../api-service.js"></script>
+    <script>
+        // Initialize API service
+        const api = new ApiService();
+    </script>
     <script src="data-entry.js"></script>
 </body>
 </html>
-
-
-

@@ -194,7 +194,161 @@
     cursor: pointer;
 }
 
-.step-section-title {
-    margin-bottom: 1.5rem;
+/* Process Timeline */
+.timeline-card {
+    margin-bottom: 2rem;
+    padding: 2rem;
+}
+
+.process-timeline {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background-color: var(--border-color);
+    z-index: 0;
+    transform: translateY(-50%);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.timeline-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: #2d5a4f;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.timeline-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.timeline-marker {
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    border: 3px solid;
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.timeline-step.finished .timeline-marker {
+    background-color: #2d5a4f;
+    border-color: #2d5a4f;
+}
+
+.timeline-step.ongoing .timeline-marker {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.timeline-step.pending .timeline-marker {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+}
+
+.timeline-step.locked .timeline-marker {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+    opacity: 0.4;
+}
+
+.timeline-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.timeline-step.finished .timeline-label {
+    color: #3d6a5f;
+}
+
+.timeline-step.ongoing .timeline-label {
+    color: #dc3545;
+}
+
+.timeline-step.locked .timeline-label {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+/* Timeline line segments removed - using progress bar instead */
+
+.timeline-step {
+    transition: all 0.3s ease;
+}
+
+.timeline-step:hover {
+    transform: translateY(-2px);
+}
+
+.timeline-step:hover .timeline-marker {
+    transform: rotate(45deg) scale(1.1);
+}
+
+.timeline-step:hover .timeline-label {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.timeline-step.locked {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.timeline-step.locked:hover {
+    transform: none;
+}
+
+.timeline-step.locked:hover .timeline-marker {
+    transform: rotate(45deg);
+}
+
+.timeline-step.locked:hover .timeline-label {
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+@media (max-width: 768px) {
+    .process-timeline {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .timeline-step {
+        flex: 0 0 auto;
+        min-width: 80px;
+    }
+    
+    .timeline-line {
+        display: none;
+    }
+    
+    .timeline-step:not(:last-child)::after {
+        display: none;
+    }
 }
 

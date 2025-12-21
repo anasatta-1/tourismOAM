@@ -32,7 +32,7 @@ function handleContracts($method, $segments, $data, $queryParams, $packageId = n
             mkdir(dirname($pdfPath), 0755, true);
         }
         
-        $stmt = $pdo->prepare("INSERT INTO contracts (package_id, contract_template_path, contract_pdf_path, status, notes) VALUES (?, ?, ?, 'draft', ?) ON DUPLICATE KEY UPDATE contract_pdf_path = VALUES(contract_pdf_path), status = 'draft'");
+        $stmt = $pdo->prepare("INSERT INTO contracts (package_id, contract_template_path, contract_pdf_path, status, notes) VALUES (?, ?, ?, 'draft', ?) ON DUPLICATE KEY UPDATE contract_pdf_path = VALUES(contract_pdf_path), status = 'draft', notes = VALUES(notes)");
         $stmt->execute([
             $packageId, $data['contract_template_path'] ?? null, $pdfPath, $data['notes'] ?? null
         ]);
