@@ -107,14 +107,41 @@ function handlePayments($method, $segments, $data, $queryParams, $packageId = nu
         
         $filepath = handleFileUpload($_FILES['file'], __DIR__ . '/../../uploads/receipts');
         
-        $stmt = $pdo->prepare("UPDATE payments SET receipt_image_path = ? WHERE payment_id = ? AND package_id = ?");
-        $stmt->execute([$filepath, $paymentId, $packageId]);
-        
-        Response::success([
-            'payment_id' => $paymentId,
-            'receipt_image_path' => $filepath,
-            'message' => 'Payment receipt uploaded successfully'
-        ]);
+        $pdo->beginTransaction();
+        try {
+            // Update payment with receipt
+            $stmt = $pdo->prepare("UPDATE payments SET receipt_image_path = ? WHERE payment_id = ? AND package_id = ?");
+            $stmt->execute([$filepath, $paymentId, $packageId]);
+            
+            // Check if payment covers full amount and update guest status to 'client'
+            // Get total paid amount
+            $stmt = $pdo->prepare("SELECT COALESCE(SUM(payment_amount), 0) as total_paid FROM payments WHERE package_id = ? AND receipt_image_path IS NOT NULL");
+            $stmt->execute([$packageId]);
+            $totalPaid = $stmt->fetch()['total_paid'] ?? 0;
+            
+            // Get package total
+            $stmt = $pdo->prepare("SELECT total_estimated_cost, guest_id FROM travel_packages WHERE package_id = ?");
+            $stmt->execute([$packageId]);
+            $package = $stmt->fetch();
+            
+            // If payment is complete (total paid >= package total), change guest to client
+            if ($package && $totalPaid >= $package['total_estimated_cost']) {
+                $stmt = $pdo->prepare("UPDATE guests SET status = 'client' WHERE guest_id = ?");
+                $stmt->execute([$package['guest_id']]);
+            }
+            
+            $pdo->commit();
+            
+            Response::success([
+                'payment_id' => $paymentId,
+                'receipt_image_path' => $filepath,
+                'message' => 'Payment receipt uploaded successfully',
+                'guest_status_updated' => ($package && $totalPaid >= $package['total_estimated_cost'])
+            ]);
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            Response::error('Failed to upload receipt: ' . $e->getMessage(), 500);
+        }
     }
     
     // GET /api/packages/:packageId/payments/:paymentId/receipt - Get receipt

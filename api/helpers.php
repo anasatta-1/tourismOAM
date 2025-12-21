@@ -127,7 +127,6 @@ function initializeTimelineSteps($pdo, $packageId) {
         'Tours',
         'Visa',
         'Quotation Generation',
-        'Contract Stage',
         'Payment Processing'
     ];
     
