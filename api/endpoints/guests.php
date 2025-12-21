@@ -228,6 +228,50 @@ function handleGuests($method, $segments, $data, $queryParams) {
         ]);
     }
     
+    // GET /api/guests/:guestId/payment-info - Get guest with packages, contracts, and payment info for payment processing
+    elseif ($method === 'GET' && count($segments) === 3 && $segments[2] === 'payment-info' && is_numeric($segments[1])) {
+        $guestId = (int)$segments[1];
+        
+        $stmt = $pdo->prepare("SELECT * FROM guests WHERE guest_id = ?");
+        $stmt->execute([$guestId]);
+        $guest = $stmt->fetch();
+        
+        if (!$guest) {
+            Response::notFound('Guest not found');
+        }
+        
+        // Get all packages for this guest
+        $stmt = $pdo->prepare("SELECT * FROM travel_packages WHERE guest_id = ? ORDER BY created_at DESC");
+        $stmt->execute([$guestId]);
+        $packages = $stmt->fetchAll();
+        
+        // For each package, get contract and payment info
+        foreach ($packages as &$package) {
+            $packageId = $package['package_id'];
+            
+            // Get contract
+            $stmt = $pdo->prepare("SELECT * FROM contracts WHERE package_id = ?");
+            $stmt->execute([$packageId]);
+            $package['contract'] = $stmt->fetch();
+            
+            // Get payments
+            $stmt = $pdo->prepare("SELECT * FROM payments WHERE package_id = ? ORDER BY payment_date DESC");
+            $stmt->execute([$packageId]);
+            $payments = $stmt->fetchAll();
+            
+            $totalPaid = array_sum(array_column($payments, 'payment_amount'));
+            $package['payments'] = $payments;
+            $package['total_paid'] = (float)$totalPaid;
+            $package['remaining_balance'] = (float)($package['total_estimated_cost'] - $totalPaid);
+            $package['is_paid_in_full'] = $totalPaid >= $package['total_estimated_cost'];
+        }
+        
+        Response::success([
+            'guest' => $guest,
+            'packages' => $packages
+        ]);
+    }
+    
     else {
         Response::notFound('Endpoint not found');
     }

@@ -374,6 +374,54 @@ document.getElementById('backBtn').addEventListener('click', () => {
     }
 });
 
+// Generic function to load saved values from localStorage
+function loadSavedValues(storageKey, datalistId) {
+    const savedValues = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const datalist = document.getElementById(datalistId);
+    if (datalist) {
+        datalist.innerHTML = savedValues.map(value => 
+            `<option value="${escapeHtml(value)}">`
+        ).join('');
+    }
+    return savedValues;
+}
+
+// Generic function to save value to localStorage
+function saveValue(storageKey, value, datalistId, maxItems = 50) {
+    if (!value || value.trim() === '') return;
+    
+    const savedValues = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const valueTrimmed = value.trim();
+    
+    // Check if value already exists (case-insensitive)
+    if (!savedValues.some(v => v.toLowerCase() === valueTrimmed.toLowerCase())) {
+        savedValues.unshift(valueTrimmed); // Add to beginning
+        // Keep only last maxItems
+        if (savedValues.length > maxItems) {
+            savedValues.pop();
+        }
+        localStorage.setItem(storageKey, JSON.stringify(savedValues));
+        if (datalistId) {
+            loadSavedValues(storageKey, datalistId); // Reload datalist
+        }
+    }
+}
+
+// Load all saved values on page load
+function loadAllSavedValues() {
+    loadSavedValues('savedCountries', 'country-list');
+    loadSavedValues('savedCities', 'city-list');
+    loadSavedValues('savedAirports', 'airport-list');
+    loadSavedValues('savedAirlines', 'airline-list');
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
 // Submit wizard data to API
 async function submitWizardData() {
     const submitBtn = document.getElementById('nextBtn');
@@ -382,23 +430,55 @@ async function submitWizardData() {
     submitBtn.textContent = 'Submitting...';
     
     try {
+        // Save all reusable values to localStorage before submission
+        const guestCountry = document.getElementById('wiz-guest-country').value;
+        const depCountry = document.getElementById('wiz-air-dep-country').value;
+        const depCity = document.getElementById('wiz-air-dep-city').value;
+        const depAirport = document.getElementById('wiz-air-dep-airport').value;
+        const destCountry = document.getElementById('wiz-air-dest-country').value;
+        const destCity = document.getElementById('wiz-air-dest-city').value;
+        const destAirport = document.getElementById('wiz-air-dest-airport').value;
+        const airline = document.getElementById('wiz-air-airline').value;
+        const accCountry = document.getElementById('wiz-acc-country').value;
+        const accCity = document.getElementById('wiz-acc-city').value;
+        const tourCountry = document.getElementById('wiz-tour-country').value;
+        const tourCity = document.getElementById('wiz-tour-city').value;
+        const visaCountry = document.getElementById('wiz-visa-country').value;
+        
+        // Save all values
+        saveValue('savedCountries', guestCountry, 'country-list');
+        saveValue('savedCountries', depCountry, 'country-list');
+        saveValue('savedCountries', destCountry, 'country-list');
+        saveValue('savedCountries', accCountry, 'country-list');
+        saveValue('savedCountries', tourCountry, 'country-list');
+        saveValue('savedCountries', visaCountry, 'country-list');
+        saveValue('savedCities', depCity, 'city-list');
+        saveValue('savedCities', destCity, 'city-list');
+        saveValue('savedCities', accCity, 'city-list');
+        saveValue('savedCities', tourCity, 'city-list');
+        saveValue('savedAirports', depAirport, 'airport-list');
+        saveValue('savedAirports', destAirport, 'airport-list');
+        if (airline) {
+            saveValue('savedAirlines', airline, 'airline-list');
+        }
+        
         // Collect all form data
         const wizardData = {
             guest: {
                 full_name: document.getElementById('wiz-guest-name').value,
                 phone_number: document.getElementById('wiz-guest-phone').value,
-                country_of_residence: document.getElementById('wiz-guest-country').value,
+                country_of_residence: guestCountry,
                 passport_image_path: null // Would be set if file upload was implemented
             },
             package_name: document.getElementById('wiz-package-name').value || null,
             air_travel: {
-                departure_country: document.getElementById('wiz-air-dep-country').value,
-                departure_city: document.getElementById('wiz-air-dep-city').value,
-                departure_airport: document.getElementById('wiz-air-dep-airport').value,
-                destination_country: document.getElementById('wiz-air-dest-country').value,
-                destination_city: document.getElementById('wiz-air-dest-city').value,
-                destination_airport: document.getElementById('wiz-air-dest-airport').value,
-                preferred_airline: document.getElementById('wiz-air-airline').value || null,
+                departure_country: depCountry,
+                departure_city: depCity,
+                departure_airport: depAirport,
+                destination_country: destCountry,
+                destination_city: destCity,
+                destination_airport: destAirport,
+                preferred_airline: airline || null,
                 number_of_adults: parseInt(document.getElementById('wiz-air-adults').value) || 0,
                 number_of_children: parseInt(document.getElementById('wiz-air-children').value) || 0,
                 number_of_infants: parseInt(document.getElementById('wiz-air-infants').value) || 0,
@@ -413,8 +493,8 @@ async function submitWizardData() {
             },
             accommodations: [{
                 accommodation_type: document.getElementById('wiz-acc-type').value,
-                country: document.getElementById('wiz-acc-country').value,
-                city: document.getElementById('wiz-acc-city').value,
+                country: accCountry,
+                city: accCity,
                 number_of_bedrooms: parseInt(document.getElementById('wiz-acc-bedrooms').value) || 1,
                 star_rating: document.getElementById('wiz-acc-star-rating').value || null,
                 bed_type: document.getElementById('wiz-acc-bed-type').value || null,
@@ -427,8 +507,8 @@ async function submitWizardData() {
                 tour_type: document.getElementById('wiz-tour-type').value,
                 tour_number: document.getElementById('wiz-tour-number').value || null,
                 number_of_transfers: parseInt(document.getElementById('wiz-tour-transfers').value) || 0,
-                country: document.getElementById('wiz-tour-country').value,
-                city: document.getElementById('wiz-tour-city').value,
+                country: tourCountry,
+                city: tourCity,
                 tour_description: document.getElementById('wiz-tour-description').value || null,
                 cost: parseFloat(document.getElementById('wiz-tour-cost').value) || 0.00,
                 tour_date: document.getElementById('wiz-tour-date').value || null,
@@ -436,7 +516,7 @@ async function submitWizardData() {
             }],
             visas: [{
                 visa_type: document.getElementById('wiz-visa-type').value,
-                country: document.getElementById('wiz-visa-country').value,
+                country: visaCountry,
                 visa_status: document.getElementById('wiz-visa-status').value,
                 cost: parseFloat(document.getElementById('wiz-visa-cost').value) || 0.00,
                 special_notes: document.getElementById('wiz-visa-notes').value || null
@@ -560,6 +640,9 @@ function checkCurrentStepCompletion() {
 // Initialize wizard timeline on page load
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🔄 Initializing wizard...');
+    
+    // Load all saved values for autocomplete
+    loadAllSavedValues();
     
     // Set initial step FIRST - always start at step 1
     currentStep = 1;
