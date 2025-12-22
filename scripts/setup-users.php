@@ -6,9 +6,9 @@
  * Usage: Open in browser: http://localhost/anas/setup-users.php
  */
 
-require_once __DIR__ . '/api/Database.php';
-require_once __DIR__ . '/api/Response.php';
-require_once __DIR__ . '/api/helpers.php';
+require_once __DIR__ . '/../api/Database.php';
+require_once __DIR__ . '/../api/Response.php';
+require_once __DIR__ . '/../api/helpers.php';
 
 header('Content-Type: application/json');
 

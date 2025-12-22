@@ -252,12 +252,35 @@ async function downloadPDF() {
                 scale: 2,
                 useCORS: true,
                 logging: false,
-                backgroundColor: '#1a1a1a', // Match the dark theme background
+                backgroundColor: '#f5f5f5', // Off-white background for PDF compatibility
                 windowWidth: contractViewer.scrollWidth || window.innerWidth,
                 windowHeight: contractViewer.scrollHeight || window.innerHeight,
                 allowTaint: true,
                 letterRendering: true,
-                removeContainer: true
+                removeContainer: true,
+                onclone: (clonedDoc) => {
+                    // Ensure off-white background and black text for PDF
+                    const clonedViewer = clonedDoc.getElementById('contract-viewer') || clonedDoc.querySelector('.contract-viewer');
+                    if (clonedViewer) {
+                        clonedViewer.style.backgroundColor = '#f5f5f5';
+                        clonedViewer.style.color = '#000000';
+                        // Force all text elements to be black
+                        const allElements = clonedViewer.querySelectorAll('*');
+                        allElements.forEach(el => {
+                            const computedStyle = clonedDoc.defaultView.getComputedStyle(el);
+                            if (computedStyle.color && computedStyle.color !== 'rgb(0, 0, 0)') {
+                                el.style.color = '#000000';
+                            }
+                            if (computedStyle.backgroundColor && computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)') {
+                                // Keep backgrounds transparent or white
+                                if (computedStyle.backgroundColor.includes('rgb(26, 26, 26)') || 
+                                    computedStyle.backgroundColor.includes('rgb(10, 14, 20)')) {
+                                    el.style.backgroundColor = '#f5f5f5';
+                                }
+                            }
+                        });
+                    }
+                }
             },
             jsPDF: { 
                 unit: 'mm', 

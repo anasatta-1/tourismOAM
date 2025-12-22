@@ -325,12 +325,28 @@ function setupActionButtons() {
                     scale: 2,
                     useCORS: true,
                     logging: false,
-                    backgroundColor: '#0a0e14', // Match the dark theme background
+                    backgroundColor: '#f5f5f5', // Off-white background for PDF
                     windowWidth: quotationContent.scrollWidth || window.innerWidth,
                     windowHeight: quotationContent.scrollHeight || window.innerHeight,
                     allowTaint: true,
                     letterRendering: true,
-                    removeContainer: true
+                    removeContainer: true,
+                    onclone: (clonedDoc) => {
+                        // Ensure white/off-white background and black text for PDF
+                        const clonedContent = clonedDoc.getElementById('quotation-content');
+                        if (clonedContent) {
+                            clonedContent.style.backgroundColor = '#f5f5f5';
+                            clonedContent.style.color = '#000000';
+                            // Force all text elements to be black
+                            const allElements = clonedContent.querySelectorAll('*');
+                            allElements.forEach(el => {
+                                const computedStyle = clonedDoc.defaultView.getComputedStyle(el);
+                                if (computedStyle.color && computedStyle.color !== 'rgb(0, 0, 0)') {
+                                    el.style.color = '#000000';
+                                }
+                            });
+                        }
+                    }
                 },
                 jsPDF: { 
                     unit: 'mm', 

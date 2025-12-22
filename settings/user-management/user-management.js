@@ -372,26 +372,41 @@ async function downloadContractPDF(packageId) {
             margin: [15, 15, 15, 15],
             filename: `contract-${packageId}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 2,
-                useCORS: true,
-                logging: false,
-                backgroundColor: '#ffffff', // Use white background for PDF
-                windowWidth: contractViewer.scrollWidth || window.innerWidth,
-                windowHeight: contractViewer.scrollHeight || window.innerHeight,
-                allowTaint: true,
-                letterRendering: true,
-                onclone: function(clonedDoc) {
-                    // Ensure contract viewer is visible in cloned document
-                    const clonedViewer = clonedDoc.getElementById('contractViewer');
-                    if (clonedViewer) {
-                        clonedViewer.style.display = 'block';
-                        clonedViewer.style.backgroundColor = '#ffffff';
-                        clonedViewer.style.color = '#000000';
-                        clonedViewer.style.padding = '2rem';
-                    }
-                }
-            },
+                   html2canvas: { 
+                       scale: 2,
+                       useCORS: true,
+                       logging: false,
+                       backgroundColor: '#f5f5f5', // Off-white background for PDF compatibility
+                       windowWidth: contractViewer.scrollWidth || window.innerWidth,
+                       windowHeight: contractViewer.scrollHeight || window.innerHeight,
+                       allowTaint: true,
+                       letterRendering: true,
+                       onclone: function(clonedDoc) {
+                           // Ensure off-white background and black text for PDF
+                           const clonedViewer = clonedDoc.getElementById('contractViewer');
+                           if (clonedViewer) {
+                               clonedViewer.style.display = 'block';
+                               clonedViewer.style.backgroundColor = '#f5f5f5'; // Off-white background
+                               clonedViewer.style.color = '#000000'; // Black text
+                               clonedViewer.style.padding = '2rem';
+                               clonedViewer.style.border = '1px solid #ddd';
+                               clonedViewer.style.borderRadius = '10px';
+                           }
+                           const clonedContractText = clonedDoc.getElementById('contractText');
+                           if (clonedContractText) {
+                               clonedContractText.style.color = '#000000'; // Black text
+                               clonedContractText.style.backgroundColor = 'transparent';
+                           }
+                           // Force all text elements within contract to be black
+                           const allElements = clonedViewer?.querySelectorAll('*') || [];
+                           allElements.forEach(el => {
+                               const computedStyle = clonedDoc.defaultView.getComputedStyle(el);
+                               if (computedStyle.color && computedStyle.color !== 'rgb(0, 0, 0)') {
+                                   el.style.color = '#000000';
+                               }
+                           });
+                       }
+                   },
             jsPDF: { 
                 unit: 'mm', 
                 format: 'a4', 
