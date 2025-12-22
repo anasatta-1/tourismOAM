@@ -407,12 +407,79 @@ function saveValue(storageKey, value, datalistId, maxItems = 50) {
     }
 }
 
+// Initialize default values if not already in localStorage
+function initializeDefaultValues() {
+    // Default countries
+    if (!localStorage.getItem('savedCountries')) {
+        const defaultCountries = [
+            'Oman', 'Egypt', 'Russia', 'Indonesia', 'Thailand'
+        ];
+        localStorage.setItem('savedCountries', JSON.stringify(defaultCountries));
+    }
+    
+    // Default cities
+    if (!localStorage.getItem('savedCities')) {
+        const defaultCities = [
+            'Muscat', // Oman
+            'Cairo', // Egypt
+            'Moscow', // Russia
+            'Jakarta', 'Bali', 'Yogyakarta', 'Surabaya', // Indonesia
+            'Bangkok', 'Phuket', 'Chiang Mai', 'Pattaya' // Thailand
+        ];
+        localStorage.setItem('savedCities', JSON.stringify(defaultCities));
+    }
+    
+    // Default airports
+    if (!localStorage.getItem('savedAirports')) {
+        const defaultAirports = [
+            'Muscat International Airport', 'Seeb International Airport', // Oman
+            'Cairo International Airport', // Egypt
+            'Moscow Sheremetyevo Airport', 'Moscow Domodedovo Airport', // Russia
+            'Jakarta Soekarno-Hatta Airport', 'Ngurah Rai International Airport', // Indonesia
+            'Suvarnabhumi Airport', 'Don Mueang International Airport', 'Phuket International Airport' // Thailand
+        ];
+        localStorage.setItem('savedAirports', JSON.stringify(defaultAirports));
+    }
+    
+    // Default airlines
+    if (!localStorage.getItem('savedAirlines')) {
+        const defaultAirlines = [
+            'Salam Air',
+            'Oman Air',
+            'Turkish Airlines',
+            'Pegasus Airlines',
+            'Middle East Airlines'
+        ];
+        localStorage.setItem('savedAirlines', JSON.stringify(defaultAirlines));
+    }
+    
+    // Default visa types
+    if (!localStorage.getItem('savedVisaTypes')) {
+        const defaultVisaTypes = [
+            'Tourist Visa',
+            'Business Visa',
+            'Transit Visa',
+            'Work Visa',
+            'Student Visa',
+            'Visit Visa',
+            'Multiple Entry Visa',
+            'Single Entry Visa'
+        ];
+        localStorage.setItem('savedVisaTypes', JSON.stringify(defaultVisaTypes));
+    }
+}
+
 // Load all saved values on page load
 function loadAllSavedValues() {
+    // Initialize defaults first if needed
+    initializeDefaultValues();
+    
+    // Then load all values
     loadSavedValues('savedCountries', 'country-list');
     loadSavedValues('savedCities', 'city-list');
     loadSavedValues('savedAirports', 'airport-list');
     loadSavedValues('savedAirlines', 'airline-list');
+    loadSavedValues('savedVisaTypes', 'visa-type-list');
 }
 
 // Escape HTML to prevent XSS
@@ -454,6 +521,12 @@ async function submitWizardData() {
         saveValue('savedCountries', visaCountry, 'country-list');
         saveValue('savedCities', depCity, 'city-list');
         saveValue('savedCities', destCity, 'city-list');
+        
+        // Save visa type
+        const visaType = document.getElementById('wiz-visa-type').value;
+        if (visaType) {
+            saveValue('savedVisaTypes', visaType, 'visa-type-list');
+        }
         saveValue('savedCities', accCity, 'city-list');
         saveValue('savedCities', tourCity, 'city-list');
         saveValue('savedAirports', depAirport, 'airport-list');

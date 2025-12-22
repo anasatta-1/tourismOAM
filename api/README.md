@@ -23,7 +23,7 @@ A lightweight, fast micro RESTful API built with PHP 8 for the Tourism Managemen
 
 1. **Database Setup**
    ```sql
-   mysql -u root -p < ../tourism_schema.sql
+   mysql -u root -p < ../database/tourism_schema.sql
    ```
 
 2. **Configuration**

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wizard - Tourism Admin Management System</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="wizard.css">
 </head>
 <body>
@@ -424,7 +424,10 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Visa Type *</label>
-                            <input type="text" class="form-control" id="wiz-visa-type" name="visa_type" placeholder="e.g., Tourist Visa, Business Visa" maxlength="100" required>
+                            <input type="text" class="form-control" id="wiz-visa-type" name="visa_type" placeholder="e.g., Tourist Visa, Business Visa" maxlength="100" list="visa-type-list" required>
+                            <datalist id="visa-type-list">
+                                <!-- Visa types will be populated from localStorage -->
+                            </datalist>
                         </div>
                     </div>
                     <div class="form-row">
@@ -492,7 +495,7 @@
         </div>
     </main>
 
-    <script src="../api-service.js"></script>
+    <script src="../assets/js/api-service.js"></script>
     <script src="wizard.js"></script>
 </body>
 </html>
