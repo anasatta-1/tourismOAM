@@ -13,12 +13,26 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
 
+# HTTPS Redirect (Uncomment and configure for production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 # Security Headers
 <IfModule mod_headers.c>
+    # CORS - Set to your production domain (e.g., https://yourdomain.com)
+    # For development, you can set to "*" but change for production!
+    # Set via environment variable or update here:
     Header set Access-Control-Allow-Origin "*"
     Header set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
     Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
     Header set Access-Control-Max-Age "3600"
+    
+    # Additional Security Headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+    # Strict-Transport-Security - Only use with HTTPS enabled
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
 </IfModule>
 
 # PHP Settings

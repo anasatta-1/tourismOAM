@@ -5,15 +5,15 @@
 After running the SQL schema, a default admin account is created:
 
 - **Username:** `admin`
-- **Password:** `admin123`
+- **Password:** `OAM@2025` (Updated: December 21, 2025)
 - **Email:** `admin@tourism.com`
 - **Role:** `admin`
 
 ## ⚠️ IMPORTANT SECURITY NOTE
 
-**Change the default password immediately after first login!**
+**The admin password has been changed from the default.**
 
-The default password is for initial setup only. In a production environment, you should:
+The password was updated to a secure value. For production environments, you should:
 
 1. Change the admin password immediately
 2. Create additional user accounts with appropriate roles

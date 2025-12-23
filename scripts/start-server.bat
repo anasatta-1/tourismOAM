@@ -9,7 +9,7 @@ echo Server will be available at:
 echo   http://localhost:8000
 echo.
 echo Test pages:
-echo   http://localhost:8000/test-api.html
+echo   http://localhost:8000/tests/test-api.html
 echo   http://localhost:8000/api/test-api.php
 echo.
 echo Press Ctrl+C to stop the server

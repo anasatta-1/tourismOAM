@@ -6,7 +6,7 @@ This guide will help you connect your database to the web application.
 
 1. **Create the database:**
    ```bash
-   mysql -u root -p < tourism_schema.sql
+   mysql -u root -p < database/tourism_schema.sql
    ```
 
 2. **Verify database creation:**

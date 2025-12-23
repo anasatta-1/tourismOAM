@@ -56,7 +56,7 @@ When you open `test-api.html` directly in the browser (file://), it cannot conne
 
 1. **Create database:**
    ```bash
-   mysql -u root -p < tourism_schema.sql
+   mysql -u root -p < database/tourism_schema.sql
    ```
 
 2. **Configure database in `api/config.php`:**
@@ -97,7 +97,7 @@ When you open `test-api.html` directly in the browser (file://), it cannot conne
 **Cause:** Wrong credentials or database not created
 **Fix:** 
 1. Check `api/config.php` credentials
-2. Run `tourism_schema.sql` to create database
+2. Run `database/tourism_schema.sql` to create database
 3. Verify MySQL is running
 
 ### Issue: "404 Not Found"

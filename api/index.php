@@ -4,9 +4,43 @@
  * Fast execution with minimal overhead
  */
 
-// Enable error reporting for development (disable in production)
+// Load environment variables from .env file if it exists
+if (file_exists(__DIR__ . '/../.env')) {
+    $envFile = file(__DIR__ . '/../.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($envFile as $line) {
+        $line = trim($line);
+        if (empty($line) || strpos($line, '#') === 0) continue; // Skip comments and empty lines
+        if (strpos($line, '=') !== false) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            // Remove quotes if present
+            $value = trim($value, '"\'');
+            if (!empty($key) && !isset($_ENV[$key])) {
+                $_ENV[$key] = $value;
+                putenv("$key=$value");
+            }
+        }
+    }
+}
+
+// Error reporting configuration - Environment-aware
 error_reporting(E_ALL);
-ini_set('display_errors', '1'); // Temporarily enable for debugging
+
+// Check if we're in production mode (via environment variable or config)
+$isProduction = ($_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'development') === 'production';
+
+if ($isProduction) {
+    // Production: Don't display errors to users, log them instead
+    ini_set('display_errors', '0');
+    ini_set('log_errors', '1');
+    ini_set('error_log', __DIR__ . '/../logs/php-errors.log');
+} else {
+    // Development: Show errors for debugging
+    ini_set('display_errors', '1');
+    ini_set('log_errors', '1');
+    ini_set('error_log', __DIR__ . '/../logs/php-errors.log');
+}
 
 // Set timezone
 date_default_timezone_set('UTC');

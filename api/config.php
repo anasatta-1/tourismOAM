@@ -4,12 +4,17 @@
  * Micro API - Fast execution
  */
 
+// Helper function to get environment variable
+function getEnvVar($key, $default = null) {
+    return $_ENV[$key] ?? getenv($key) ?: $default;
+}
+
 return [
     'db' => [
-        'host' => $_ENV['DB_HOST'] ?? 'localhost',
-        'dbname' => $_ENV['DB_NAME'] ?? 'tourism_db',
-        'username' => $_ENV['DB_USER'] ?? 'root',
-        'password' => $_ENV['DB_PASS'] ?? '',
+        'host' => getEnvVar('DB_HOST', 'localhost'),
+        'dbname' => getEnvVar('DB_NAME', 'tourism_db'),
+        'username' => getEnvVar('DB_USER', 'root'),
+        'password' => getEnvVar('DB_PASS', ''),
         'charset' => 'utf8mb4',
         'options' => [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
