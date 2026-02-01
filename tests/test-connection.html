@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .loading {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 API Connection Diagnostic Tool</h1>
+    
+    <div class="test-section">
+        <h2>1. API Base URL Detection</h2>
+        <button onclick="testApiUrl()">Test API URL</button>
+        <div id="urlResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. API Endpoint Test</h2>
+        <button onclick="testApiEndpoint()">Test API Endpoint</button>
+        <div id="endpointResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Database Connection Test</h2>
+        <button onclick="testDatabase()">Test Database Connection</button>
+        <div id="dbResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Get Packages Test</h2>
+        <button onclick="testGetPackages()">Get Packages</button>
+        <div id="packagesResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>5. Get Guests Test</h2>
+        <button onclick="testGetGuests()">Get Guests</button>
+        <div id="guestsResult" class="result"></div>
+    </div>
+    
+    <script src="../assets/js/api-service.js"></script>
+    <script>
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.className = 'result ' + type;
+            element.textContent = message;
+        }
+        
+        function testApiUrl() {
+            const apiUrl = window.location.origin + '/anas/api';
+            const detectedUrl = api.baseUrl;
+            const info = `Detected API URL: ${detectedUrl}\nExpected: ${apiUrl}\nCurrent Page: ${window.location.href}\nOrigin: ${window.location.origin}\nPathname: ${window.location.pathname}`;
+            showResult('urlResult', info, 'info');
+        }
+        
+        async function testApiEndpoint() {
+            showResult('endpointResult', 'Testing...', 'loading');
+            try {
+                const response = await fetch(api.baseUrl + '/test-api.php');
+                const text = await response.text();
+                showResult('endpointResult', `Status: ${response.status}\nResponse:\n${text}`, response.ok ? 'success' : 'error');
+            } catch (error) {
+                showResult('endpointResult', `Error: ${error.message}\n\nMake sure:\n1. XAMPP Apache is running\n2. The API URL is correct\n3. Check browser console for CORS errors`, 'error');
+            }
+        }
+        
+        async function testDatabase() {
+            showResult('dbResult', 'Testing database connection...', 'loading');
+            try {
+                const response = await fetch(api.baseUrl + '/test-connection.php');
+                const data = await response.json();
+                if (data.success) {
+                    showResult('dbResult', `✅ Database Connected!\n\nDatabase: ${data.data.database}\nTables: ${data.data.tables_count}\nTables List:\n${data.data.tables.join(', ')}`, 'success');
+                } else {
+                    showResult('dbResult', `❌ Database Error:\n${data.message}`, 'error');
+                }
+            } catch (error) {
+                showResult('dbResult', `❌ Connection Error:\n${error.message}\n\nCheck:\n1. Database name in api/config.php (should be 'tourism_db')\n2. MySQL is running in XAMPP\n3. Database exists in phpMyAdmin`, 'error');
+            }
+        }
+        
+        async function testGetPackages() {
+            showResult('packagesResult', 'Fetching packages...', 'loading');
+            try {
+                const response = await api.getPackages();
+                showResult('packagesResult', `✅ Success!\n\nFound ${response.data.length} packages\n\nData:\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('packagesResult', `❌ Error:\n${error.message}\n\nStack:\n${error.stack}`, 'error');
+            }
+        }
+        
+        async function testGetGuests() {
+            showResult('guestsResult', 'Fetching guests...', 'loading');
+            try {
+                const response = await api.getGuests();
+                showResult('guestsResult', `✅ Success!\n\nFound ${response.data.length} guests\n\nData:\n${JSON.stringify(response, null, 2)}`, 'success');
+            } catch (error) {
+                showResult('guestsResult', `❌ Error:\n${error.message}\n\nStack:\n${error.stack}`, 'error');
+            }
+        }
+        
+        // Auto-run URL test on load
+        window.addEventListener('load', testApiUrl);
+    </script>
+</body>
+</html>
+

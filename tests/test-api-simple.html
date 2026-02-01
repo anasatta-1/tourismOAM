@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple API Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .test { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { background: #d4edda; }
+        .error { background: #f8d7da; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Simple API Connection Test</h1>
+    
+    <div class="test">
+        <h3>1. Check API URL</h3>
+        <button onclick="checkUrl()">Check URL</button>
+        <pre id="urlResult"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>2. Test API Endpoint</h3>
+        <button onclick="testApi()">Test API</button>
+        <pre id="apiResult"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>3. Test Database Connection</h3>
+        <button onclick="testDB()">Test DB</button>
+        <pre id="dbResult"></pre>
+    </div>
+    
+    <div class="test">
+        <h3>4. Test Get Packages</h3>
+        <button onclick="testPackages()">Get Packages</button>
+        <pre id="packagesResult"></pre>
+    </div>
+    
+    <script src="../assets/js/api-service.js"></script>
+    <script>
+        function checkUrl() {
+            const info = {
+                'Current URL': window.location.href,
+                'Origin': window.location.origin,
+                'Pathname': window.location.pathname,
+                'Detected API URL': api.baseUrl,
+                'Expected API URL': window.location.origin + '/anas/api'
+            };
+            document.getElementById('urlResult').textContent = JSON.stringify(info, null, 2);
+        }
+        
+        async function testApi() {
+            const result = document.getElementById('apiResult');
+            result.textContent = 'Testing...';
+            try {
+                const response = await fetch(api.baseUrl + '/test-api.php');
+                const text = await response.text();
+                result.textContent = `Status: ${response.status}\n\nResponse:\n${text}`;
+                result.parentElement.className = response.ok ? 'test success' : 'test error';
+            } catch (error) {
+                result.textContent = `ERROR: ${error.message}\n\nMake sure:\n1. XAMPP Apache is running\n2. URL: ${api.baseUrl}/test-api.php`;
+                result.parentElement.className = 'test error';
+            }
+        }
+        
+        async function testDB() {
+            const result = document.getElementById('dbResult');
+            result.textContent = 'Testing...';
+            try {
+                const response = await fetch(api.baseUrl + '/test-connection.php');
+                const data = await response.json();
+                result.textContent = JSON.stringify(data, null, 2);
+                result.parentElement.className = data.success ? 'test success' : 'test error';
+            } catch (error) {
+                result.textContent = `ERROR: ${error.message}`;
+                result.parentElement.className = 'test error';
+            }
+        }
+        
+        async function testPackages() {
+            const result = document.getElementById('packagesResult');
+            result.textContent = 'Testing...';
+            try {
+                const response = await api.getPackages();
+                result.textContent = JSON.stringify(response, null, 2);
+                result.parentElement.className = 'test success';
+            } catch (error) {
+                result.textContent = `ERROR: ${error.message}\n\nStack:\n${error.stack}`;
+                result.parentElement.className = 'test error';
+            }
+        }
+        
+        // Auto-check URL on load
+        window.onload = checkUrl;
+    </script>
+</body>
+</html>
+

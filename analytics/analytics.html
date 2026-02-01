@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="analytics.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Main</span>
+            </a></li>
+            <li><a href="analytics.html" class="active">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Analytics</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Filter Bar -->
+        <div class="card">
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Date Range:</label>
+                    <select class="form-control filter-select">
+                        <option>Last 7 days</option>
+                        <option>Last 30 days</option>
+                        <option>Last 3 months</option>
+                        <option>Last year</option>
+                        <option>Custom range</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Destination:</label>
+                    <select class="form-control filter-select">
+                        <option>All Destinations</option>
+                        <option>Paris</option>
+                        <option>Tokyo</option>
+                        <option>Bali</option>
+                        <option>New York</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Category:</label>
+                    <select class="form-control filter-select">
+                        <option>All Categories</option>
+                        <option>Adventure</option>
+                        <option>Relaxation</option>
+                        <option>Cultural</option>
+                        <option>Business</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary export-btn">Export Report</button>
+            </div>
+        </div>
+
+        <!-- Overview Cards -->
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Total Bookings</div>
+                    <div class="overview-card-icon">📋</div>
+                </div>
+                <div class="overview-card-value">1,247</div>
+                <div class="overview-card-change">+12% from last month</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Active Destinations</div>
+                    <div class="overview-card-icon">🌍</div>
+                </div>
+                <div class="overview-card-value">48</div>
+                <div class="overview-card-change">+3 new this month</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Pending Tasks</div>
+                    <div class="overview-card-icon">⏳</div>
+                </div>
+                <div class="overview-card-value">23</div>
+                <div class="overview-card-change warning-text">Requires attention</div>
+            </div>
+
+            <div class="overview-card">
+                <div class="overview-card-header">
+                    <div class="overview-card-title">Revenue</div>
+                    <div class="overview-card-icon">💰</div>
+                </div>
+                <div class="overview-card-value">$124,580</div>
+                <div class="overview-card-change">+8% from last month</div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Recent Activity</h3>
+            </div>
+            <div class="activity-log">
+                <div class="activity-item">
+                    <div class="activity-icon booking">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New booking received for Paris Package</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon destination">🌍</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Destination "Bali" was updated</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon user">👤</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New user registration: john.doe@example.com</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon booking">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Booking #1247 was confirmed</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon destination">🌍</div>
+                    <div class="activity-content">
+                        <div class="activity-title">New destination "Tokyo" was added</div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon booking">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-title">Payment received for booking #1245</div>
+                        <div class="activity-time">5 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="stat-value">1,247</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">$124,580</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">48</div>
+                <div class="stat-label">Destinations</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">89%</div>
+                <div class="stat-label">Satisfaction Rate</div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="../assets/js/api-service.js"></script>
+    <script src="analytics.js"></script>
+</body>
+</html>

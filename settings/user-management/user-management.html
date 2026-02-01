@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="user-management.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../../index.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Main</span>
+            </a></li>
+            <li><a href="../../analytics/analytics.html">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+            <li><a href="user-management.html" class="active">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span>User Management</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">User Management</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1>User Management</h1>
+            <p>Manage guests and process payments</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Users</button>
+            <button class="filter-tab" data-filter="guest">Guests</button>
+            <button class="filter-tab" data-filter="client">Clients</button>
+        </div>
+
+        <!-- Guests List -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Users List</h3>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by phone number...">
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Country</th>
+                            <th>Status</th>
+                            <th>Packages</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guestsTableBody">
+                        <tr>
+                            <td colspan="6" class="loading-text">Loading users...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Guest Detail Modal -->
+    <div class="modal" id="guestDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalGuestName">Guest Details</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="guestDetailContent">
+                <!-- Guest details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Processing Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2>Proceed to Payment</h2>
+                <button class="modal-close" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="modal-body" id="paymentContent">
+                <!-- Payment processing content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../../assets/js/api-service.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="user-management.js"></script>
+</body>
+</html>

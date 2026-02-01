@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Management - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="package-management.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Main</span>
+            </a></li>
+            <li><a href="../analytics/analytics.html">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+            <li><a href="../data-entry/data-entry.html">
+                <span class="sidebar-menu-icon">📝</span>
+                <span>Data Entry</span>
+            </a></li>
+            <li><a href="package-management.html" class="active">
+                <span class="sidebar-menu-icon">📦</span>
+                <span>Packages</span>
+            </a></li>
+            <li><a href="../settings/user-management/user-management.html">
+                <span class="sidebar-menu-icon">⚙️</span>
+                <span>User Management</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Package Management</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-card-title">Total Packages</div>
+                    <div class="stat-card-icon">📦</div>
+                </div>
+                <div class="stat-card-value" id="stat-total">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-card-title">Active Packages</div>
+                    <div class="stat-card-icon">✅</div>
+                </div>
+                <div class="stat-card-value" id="stat-active">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-card-title">Total Revenue</div>
+                    <div class="stat-card-icon">💰</div>
+                </div>
+                <div class="stat-card-value" id="stat-revenue">$0.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-header">
+                    <div class="stat-card-title">Pending</div>
+                    <div class="stat-card-icon">⏳</div>
+                </div>
+                <div class="stat-card-value" id="stat-pending">0</div>
+            </div>
+        </div>
+
+        <!-- Search and Filter Bar -->
+        <div class="card">
+            <div class="search-filter-bar">
+                <div class="search-group">
+                    <label>Search by Package ID:</label>
+                    <div class="search-input-wrapper">
+                        <input type="number" class="form-control" id="search-package-id" placeholder="Enter Package ID">
+                        <button class="btn btn-primary" id="search-btn">Search</button>
+                        <button class="btn btn-outline" id="show-all-btn">Show All</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Filter by Status:</label>
+                    <select class="form-control" id="filter-status">
+                        <option value="">All Statuses</option>
+                        <option value="draft">Draft</option>
+                        <option value="quotation_sent">Quotation Sent</option>
+                        <option value="contract_sent">Contract Sent</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="create-package-btn" disabled>+ Create New Package</button>
+            </div>
+        </div>
+
+        <!-- Packages Table -->
+        <div class="card">
+            <div class="card-header table-header-actions">
+                <h3>Packages</h3>
+                <div class="table-info" id="table-info">Loading...</div>
+            </div>
+            <div class="table-wrapper">
+                <table class="table" id="packages-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Package Name</th>
+                            <th>Guest Name</th>
+                            <th>Status</th>
+                            <th>Total Cost</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="packages-tbody">
+                        <tr>
+                            <td colspan="7" class="loading-row">Loading packages...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Pagination -->
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="btn btn-outline" id="prev-page">Previous</button>
+                <span class="pagination-info" id="pagination-info"></span>
+                <button class="btn btn-outline" id="next-page">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Package Modal -->
+    <div class="modal" id="create-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Package</h3>
+                <button class="modal-close" id="close-create-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="create-package-form">
+                    <div class="form-group">
+                        <label class="form-label">Guest ID *</label>
+                        <input type="number" class="form-control" id="create-guest-id" name="guest_id" placeholder="Enter Guest ID" required>
+                        <small class="form-hint">Enter the ID of an existing guest</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Package Name</label>
+                        <input type="text" class="form-control" id="create-package-name" name="package_name" placeholder="Enter package name (optional)" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <select class="form-control" id="create-package-status" name="status" required>
+                            <option value="draft" selected>Draft</option>
+                            <option value="quotation_sent">Quotation Sent</option>
+                            <option value="contract_sent">Contract Sent</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-create-btn">Cancel</button>
+                <button class="btn btn-primary" id="submit-create-btn">Create Package</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Package Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Package</h3>
+                <button class="modal-close" id="close-edit-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-package-form">
+                    <input type="hidden" id="edit-package-id">
+                    <div class="form-group">
+                        <label class="form-label">Package Name</label>
+                        <input type="text" class="form-control" id="edit-package-name" name="package_name" placeholder="Enter package name" maxlength="200">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <select class="form-control" id="edit-package-status" name="status" required>
+                            <option value="draft">Draft</option>
+                            <option value="quotation_sent">Quotation Sent</option>
+                            <option value="contract_sent">Contract Sent</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+                <button class="btn btn-primary" id="submit-edit-btn">Update Package</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Package Details Modal -->
+    <div class="modal modal-large" id="view-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Package Details</h3>
+                <button class="modal-close" id="close-view-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="view-modal-body">
+                <div class="loading-text">Loading package details...</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="close-view-btn">Close</button>
+                <button class="btn btn-primary" id="edit-from-view-btn">Edit Package</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Delete Package</h3>
+                <button class="modal-close" id="close-delete-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this package?</p>
+                <p class="delete-warning"><strong>Package ID:</strong> <span id="delete-package-id"></span></p>
+                <p class="delete-warning">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancel-delete-btn">Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete-btn">Delete Package</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/api-service.js"></script>
+    <script>
+        // Initialize API service
+        const api = new ApiService();
+    </script>
+    <script src="package-management.js"></script>
+</body>
+</html>
+

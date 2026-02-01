@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract - Tourism Admin Management System</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="contract.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Tourism Admin</div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.html">
+                <span class="sidebar-menu-icon">📊</span>
+                <span>Main</span>
+            </a></li>
+            <li><a href="../analytics/analytics.html">
+                <span class="sidebar-menu-icon">📈</span>
+                <span>Analytics</span>
+            </a></li>
+            <li><a href="../wizard/wizard.html">
+                <span class="sidebar-menu-icon">✨</span>
+                <span>Wizard</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="top-nav-title">Contract</div>
+        <div class="profile-menu">
+            <div class="profile-avatar">AD</div>
+            <div>
+                <div class="profile-name">Admin User</div>
+                <div class="profile-role">Administrator</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div id="loading" class="loading-container" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p>Loading contract...</p>
+        </div>
+
+        <div id="contract-content" style="display: none;">
+            <!-- Action Buttons -->
+            <div class="contract-actions">
+                <button class="btn btn-primary" id="edit-btn">Edit</button>
+                <button class="btn btn-secondary" id="download-pdf-btn">Download PDF</button>
+            </div>
+
+            <!-- Contract Viewer Container -->
+            <div class="contract-viewer" id="contract-viewer">
+                <div class="contract-content" id="contract-text">
+                    <!-- Contract content will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <div id="error-message" class="error-container" style="display: none;">
+            <div class="error-card">
+                <h2>Error</h2>
+                <p id="error-text">An error occurred while loading the contract.</p>
+                <button class="btn btn-primary" onclick="window.location.href='../index.html'">Back to Dashboard</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/api-service.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // Initialize API service
+        const api = new ApiService();
+    </script>
+    <script src="contract.js"></script>
+</body>
+</html>
+

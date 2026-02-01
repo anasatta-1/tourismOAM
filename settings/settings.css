@@ -1,0 +1,39 @@
+/* Settings Page Specific Styles */
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.quick-action-btn {
+    padding: 1.25rem;
+    background-color: var(--card-bg);
+    border: 2px dashed var(--border-color);
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.quick-action-btn:hover {
+    border-color: var(--accent-color);
+    background-color: rgba(26, 77, 62, 0.15);
+    transform: translateY(-2px);
+}
+
+.quick-action-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.quick-action-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+
+

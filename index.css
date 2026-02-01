@@ -1,0 +1,150 @@
+/* Dashboard Page Specific Styles */
+
+.activity-log {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.activity-icon.booking {
+    background-color: rgba(26, 77, 62, 0.2);
+    color: var(--accent-light);
+}
+
+.activity-icon.user {
+    background-color: rgba(45, 74, 107, 0.2);
+    color: var(--primary-color);
+}
+
+.activity-icon.destination {
+    background-color: rgba(45, 90, 79, 0.2);
+    color: var(--success-light);
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.activity-time {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+}
+
+/* Main Page Styles */
+.main-page-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 200px);
+    padding: 2rem;
+}
+
+.main-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    width: 100%;
+}
+
+.main-page-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--card-bg) 0%, var(--card-bg-light) 100%);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: var(--shadow-card);
+    min-height: 250px;
+}
+
+.main-page-button:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+    background: linear-gradient(135deg, rgba(26, 77, 62, 0.2) 0%, rgba(26, 77, 62, 0.1) 100%);
+    box-shadow: var(--shadow-hover);
+}
+
+.main-button-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.main-page-button:hover .main-button-icon {
+    transform: scale(1.1);
+}
+
+.main-button-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.main-button-description {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .main-buttons-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .main-page-button {
+        min-height: 200px;
+        padding: 2rem 1.5rem;
+    }
+    
+    .main-button-icon {
+        font-size: 3rem;
+    }
+    
+    .main-button-title {
+        font-size: 1.5rem;
+    }
+}
+

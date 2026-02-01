@@ -1,0 +1,27 @@
+# Root .htaccess - Production Security
+
+# Force HTTPS (uncomment when SSL is configured)
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent access to sensitive files
+<FilesMatch "\.(env|log|sql|md|git|gitignore)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block test files in production (uncomment to enable)
+# <FilesMatch "test-api\.html$">
+#     Order Allow,Deny
+#     Deny from all
+# </FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect config files
+<FilesMatch "^(config\.php|\.env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>

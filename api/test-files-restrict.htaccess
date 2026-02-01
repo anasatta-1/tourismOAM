@@ -1,0 +1,17 @@
+# Restrict access to test files in production
+# This file should be renamed to .htaccess in production
+# Or add these rules to the main api/.htaccess
+
+# Deny access to test files
+<FilesMatch "^(test-|debug-).*\.(php|html)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Alternative: Allow only from localhost (for development)
+# <FilesMatch "^(test-|debug-).*\.(php|html)$">
+#     Order Deny,Allow
+#     Deny from all
+#     Allow from 127.0.0.1
+#     Allow from localhost
+# </FilesMatch>
